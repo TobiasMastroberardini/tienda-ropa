@@ -1,0 +1,18 @@
+/* Agregar transiciones suaves para las imágenes */
+.group img {
+  transition: opacity 0.3s ease-in-out; /* Transición para opacidad */
+}
+
+/* La imagen secundaria está oculta por defecto */
+.group img:nth-child(2) {
+  opacity: 0; /* Comienza oculto */
+}
+
+/* Cuando el mouse pasa sobre el contenedor, la imagen secundaria se muestra */
+.group:hover img:nth-child(1) {
+  opacity: 0; /* Imagen principal oculta en hover */
+}
+
+.group:hover img:nth-child(2) {
+  opacity: 1; /* Imagen secundaria visible en hover */
+}

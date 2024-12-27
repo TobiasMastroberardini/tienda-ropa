@@ -1,3 +1,9 @@
+export interface Image {
+  id?: number;
+  product_id: number;
+  image_url: string;
+}
+
 export interface Product {
   id?: number;
   name: string;
@@ -5,5 +11,5 @@ export interface Product {
   description: string;
   available: boolean;
   category_id: number;
-  images: File[]; // Cambié File[] a ProductImage[]
+  images: File[];
 }

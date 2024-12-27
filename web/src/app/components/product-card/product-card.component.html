@@ -1,9 +1,17 @@
 <div class="group relative">
   <img
     *ngIf="product.images.length > 0"
-    [src]="'http://localhost:3000/api/' + product.images[0]"
+    [src]="'http://localhost:3000/api' + product.images[0].image_url"
     alt="Imagen del producto"
-    class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+    class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80"
+  />
+
+  <!-- Imagen para el hover -->
+  <img
+    *ngIf="product.images.length > 1"
+    [src]="'http://localhost:3000/api' + product.images[1].image_url"
+    alt="Imagen secundaria del producto"
+    class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80 absolute inset-0 transition-opacity duration-300"
   />
 
   <div class="mt-4 flex justify-between">

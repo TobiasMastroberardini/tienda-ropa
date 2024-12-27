@@ -5,7 +5,13 @@
     <!-- Nombre del Producto -->
     <div>
       <label for="name">Nombre</label>
-      <input type="text" id="name" [(ngModel)]="name" name="name" required />
+      <input
+        type="text"
+        id="name"
+        [(ngModel)]="product.name"
+        name="name"
+        required
+      />
     </div>
 
     <!-- Precio -->
@@ -14,7 +20,7 @@
       <input
         type="number"
         id="price"
-        [(ngModel)]="price"
+        [(ngModel)]="product.price"
         name="price"
         required
       />
@@ -25,7 +31,7 @@
       <label for="description">Descripción</label>
       <textarea
         id="description"
-        [(ngModel)]="description"
+        [(ngModel)]="product.description"
         name="description"
         required
       ></textarea>
@@ -34,7 +40,12 @@
     <!-- Estado -->
     <div>
       <label for="available">Estado</label>
-      <select id="available" [(ngModel)]="available" name="available" required>
+      <select
+        id="available"
+        [(ngModel)]="product.available"
+        name="available"
+        required
+      >
         <option [ngValue]="true">Disponible</option>
         <option [ngValue]="false">No Disponible</option>
       </select>
@@ -47,7 +58,7 @@
       <label for="categoria">Categoría</label>
       <select
         id="categoria"
-        [(ngModel)]="category_id"
+        [(ngModel)]="product.category_id"
         name="categoria"
         required
       >

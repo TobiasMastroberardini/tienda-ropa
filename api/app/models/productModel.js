@@ -28,19 +28,6 @@ class ProductModel {
     }
   }
 
-  static async addProductImages(productId, imageUrls) {
-    const values = imageUrls
-      .map((url, index) => `($1, $${index + 2})`)
-      .join(", ");
-    const query = `INSERT INTO product_images (product_id, image_url) VALUES ${values}`;
-
-    try {
-      await pool.query(query, [productId, ...imageUrls]);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async updateProduct(id, data) {
     const columns = Object.keys(data);
     const setClause = columns

@@ -2,7 +2,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url"; // Import fileURLToPath to get the current filename
 
 import cartItemRoutes from "./app/routes/cartItemRoutes.js";
 import cartRoutes from "./app/routes/cartRoutes.js";
@@ -22,9 +21,12 @@ app.use(
     origin: "http://localhost:4200", // Permite solicitudes solo desde tu frontend
   })
 );
-// Define __dirname using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename); // Get directory name from the filename
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+  res.send("Hola, el servidor está funcionando!");
+});
 
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
@@ -34,13 +36,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/order_items", orderItemRoutes);
 
-// Serve static files from uploads/images
-app.use(
-  "/uploads/images",
-  express.static(path.join(__dirname, "uploads", "images"))
-);
-
-// app.use("/api/product_images", productImageRoutes);
+// Serve static files from uploads
+app.use("/api/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 3000;
 

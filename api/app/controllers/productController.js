@@ -52,7 +52,7 @@ class ProductController {
       // Guardar las imágenes si existen
       if (images && images.length > 0) {
         const imageUrls = images.map((file) => `/uploads/${file.filename}`);
-        await ProductModel.addProductImages(productId, imageUrls);
+        await ProductImageModel.addProductImages(productId, imageUrls);
       }
 
       res.status(201).json({ id: productId, ...newProduct });

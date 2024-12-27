@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Product } from '../../models/productInteface';
 import { ProductService } from '../../services/product/product.service';
-
 @Component({
   selector: 'app-create-product',
   standalone: true,
@@ -11,35 +11,38 @@ import { ProductService } from '../../services/product/product.service';
   styleUrls: ['./create-product.component.scss'],
 })
 export class CreateProductComponent {
-  // Propiedades de producto
-  name: string = '';
-  price: number | null = null;
-  description: string = '';
-  available: boolean = true; // Ejemplo: true = disponible, false = no disponible
-  category_id: number = 1; // Para manejar la categoría seleccionada
-  images: File[] = []; // Almacena las imágenes seleccionadas
+  // Usar la interfaz Product para tipar el producto
+  product: Product = {
+    name: '',
+    price: 0,
+    description: '',
+    available: true,
+    category_id: 1,
+    images: [],
+  };
 
-  // Lista de categorías
+  // Lista de categorías (esto puede venir de una API)
   categories = [
     { id: 1, name: 'Camisetas' },
     { id: 2, name: 'Pantalones' },
     { id: 3, name: 'Zapatos' },
-  ]; // Aquí puedes obtener las categorías desde la API si es necesario
+  ];
 
   constructor(private productService: ProductService) {}
 
+  // Crear producto usando FormData
   createProduct() {
     const formData = new FormData();
 
     // Agregar los datos del producto al FormData
-    formData.append('name', this.name);
-    formData.append('price', this.price?.toString() || '0');
-    formData.append('description', this.description);
-    formData.append('available', this.available.toString());
-    formData.append('category_id', this.category_id.toString());
+    formData.append('name', this.product.name);
+    formData.append('price', this.product.price.toString());
+    formData.append('description', this.product.description);
+    formData.append('available', this.product.available.toString());
+    formData.append('category_id', this.product.category_id.toString());
 
     // Agregar las imágenes al FormData
-    this.images.forEach((file) => {
+    this.product.images.forEach((file) => {
       formData.append('images', file); // El nombre 'images' debe coincidir con el backend
     });
 
@@ -55,20 +58,23 @@ export class CreateProductComponent {
     );
   }
 
+  // Manejar la selección de archivos
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files) {
-      this.images = Array.from(input.files); // Convertir FileList a array
+      this.product.images = Array.from(input.files); // Convertir FileList a array
     }
   }
 
   // Método para limpiar el formulario
   resetForm() {
-    this.name = '';
-    this.price = null;
-    this.description = '';
-    this.available = true;
-    this.category_id = 1;
-    this.images = [];
+    this.product = {
+      name: '',
+      price: 0,
+      description: '',
+      available: true,
+      category_id: 1,
+      images: [],
+    };
   }
 }

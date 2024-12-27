@@ -15,11 +15,11 @@ class ProductImageModel {
     return rows;
   }
 
-  static async addImagesToProduct(productId, imageUrls) {
+  static async addProductImages(productId, imageUrls) {
     const values = imageUrls
       .map((url, index) => `($1, $${index + 2})`)
       .join(", ");
-    const query = `INSERT INTO product_images (product_id, imagen_url) VALUES ${values}`;
+    const query = `INSERT INTO product_images (product_id, image_url) VALUES ${values}`;
 
     try {
       await pool.query(query, [productId, ...imageUrls]);
@@ -27,6 +27,7 @@ class ProductImageModel {
       throw error;
     }
   }
+
   static async delete(id) {
     const { rows } = await pool.query(
       "DELETE FROM product_images WHERE id = $1 RETURNING *",

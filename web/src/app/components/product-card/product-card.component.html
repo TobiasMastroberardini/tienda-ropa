@@ -1,31 +1,30 @@
 <div class="group relative">
-  <img
-    *ngIf="product.images.length > 0"
-    [src]="'http://localhost:3000/api' + product.images[0].image_url"
-    alt="Imagen del producto"
-    class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80"
-  />
+  <a href="modal/{{ product.id }}">
+    <img
+      *ngIf="product.images.length > 0"
+      [src]="'http://localhost:3000/api' + product.images[0].image_url"
+      alt="Imagen del producto"
+      class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80"
+    />
 
-  <!-- Imagen para el hover -->
-  <img
-    *ngIf="product.images.length > 1"
-    [src]="'http://localhost:3000/api' + product.images[1].image_url"
-    alt="Imagen secundaria del producto"
-    class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80 absolute inset-0 transition-opacity duration-300"
-  />
-
-  <div class="mt-4 flex justify-between">
-    <div>
-      <h3 class="text-sm text-gray-900">
-        <a href="#">
+    <!-- Imagen para el hover -->
+    <img
+      *ngIf="product.images.length > 1"
+      [src]="'http://localhost:3000/api' + product.images[1].image_url"
+      alt="Imagen secundaria del producto"
+      class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80 absolute inset-0 transition-opacity duration-300"
+    />
+    <div class="mt-4 flex justify-between">
+      <div>
+        <h3 class="text-sm text-gray-900">
           <span aria-hidden="true" class="absolute inset-0"></span>
           {{ product.name }}
-        </a>
-      </h3>
-      <p class="mt-1 text-sm text-gray-900">Black</p>
+        </h3>
+        <p class="mt-1 text-sm text-gray-900">Black</p>
+      </div>
+      <p class="text-sm font-medium text-gray-900">
+        {{ product.price | currency }}
+      </p>
     </div>
-    <p class="text-sm font-medium text-gray-900">
-      {{ product.price | currency }}
-    </p>
-  </div>
+  </a>
 </div>

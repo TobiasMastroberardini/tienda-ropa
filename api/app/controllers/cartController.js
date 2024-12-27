@@ -24,6 +24,19 @@ class CartController {
     }
   }
 
+  static async getByUserId(req, res) {
+    try {
+      const cart = await CartModel.getUserById(req.params.id);
+      if (cart) {
+        res.json(cart);
+      } else {
+        res.status(404).json({ error: "Cart not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch cart" });
+    }
+  }
+
   static async create(req, res) {
     try {
       const cart = await CartModel.create(req.body);

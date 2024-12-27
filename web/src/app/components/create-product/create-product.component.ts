@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Product } from '../../models/productInteface';
+import { CategoryService } from '../../services/category/category.service';
 import { ProductService } from '../../services/product/product.service';
 @Component({
   selector: 'app-create-product',
@@ -10,25 +11,35 @@ import { ProductService } from '../../services/product/product.service';
   templateUrl: './create-product.component.html',
   styleUrls: ['./create-product.component.scss'],
 })
-export class CreateProductComponent {
+export class CreateProductComponent implements OnInit {
   // Usar la interfaz Product para tipar el producto
   product: Product = {
     name: '',
     price: 0,
     description: '',
     available: true,
-    category_id: 1,
+    category_id: 2,
     images: [],
   };
 
   // Lista de categorías (esto puede venir de una API)
-  categories = [
-    { id: 1, name: 'Camisetas' },
-    { id: 2, name: 'Pantalones' },
-    { id: 3, name: 'Zapatos' },
-  ];
+  categories: any[] = [];
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService
+  ) {}
+
+  ngOnInit(): void {
+    this.categoryService.getAll().subscribe(
+      (data) => {
+        this.categories = data; // Asignar los productos obtenidos
+      },
+      (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    );
+  }
 
   // Crear producto usando FormData
   createProduct() {

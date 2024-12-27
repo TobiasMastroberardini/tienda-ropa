@@ -8,18 +8,18 @@ import { ProductService } from '../../services/product/product.service';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './create-product.component.html',
-  styleUrl: './create-product.component.scss',
+  styleUrls: ['./create-product.component.scss'],
 })
 export class CreateProductComponent {
-  product = {
-    name: '',
-    price: '',
-    description: '',
-    available: true,
-    category_id: 1,
-    images: [] as File[],
-  };
+  // Propiedades de producto
+  name: string = '';
+  price: number | null = null;
+  description: string = '';
+  available: boolean = true; // Ejemplo: true = disponible, false = no disponible
+  category_id: number = 1; // Para manejar la categoría seleccionada
+  images: File[] = []; // Almacena las imágenes seleccionadas
 
+  // Lista de categorías
   categories = [
     { id: 1, name: 'Camisetas' },
     { id: 2, name: 'Pantalones' },
@@ -28,32 +28,47 @@ export class CreateProductComponent {
 
   constructor(private productService: ProductService) {}
 
-  onFileChange(event: any): void {
-    // Asignar las imágenes seleccionadas al array `images`
-    if (event.target.files) {
-      this.product.images = Array.from(event.target.files);
+  createProduct() {
+    const formData = new FormData();
+
+    // Agregar los datos del producto al FormData
+    formData.append('name', this.name);
+    formData.append('price', this.price?.toString() || '0');
+    formData.append('description', this.description);
+    formData.append('available', this.available.toString());
+    formData.append('category_id', this.category_id.toString());
+
+    // Agregar las imágenes al FormData
+    this.images.forEach((file) => {
+      formData.append('images', file); // El nombre 'images' debe coincidir con el backend
+    });
+
+    // Enviar los datos al servicio
+    this.productService.createProduct(formData).subscribe(
+      (response) => {
+        console.log('Producto creado satisfactoriamente:', response);
+        this.resetForm(); // Limpiar el formulario después de enviar
+      },
+      (error) => {
+        console.error('Error al crear producto', error);
+      }
+    );
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.images = Array.from(input.files); // Convertir FileList a array
     }
   }
 
-  submit(): void {
-    const productData = {
-      name: this.product.name,
-      price: this.product.price,
-      description: this.product.description,
-      available: this.product.available,
-      category_id: this.product.category_id,
-      images: this.product.images.map((image) => ({ image_url: image.name })), // Transformar al formato esperado
-    };
-
-    this.productService.create(productData).subscribe({
-      next: (response) => {
-        console.log('Producto creado:', response);
-        alert('Producto creado con éxito');
-      },
-      error: (error) => {
-        console.error('Error al crear el producto:', error);
-        alert('Hubo un error al crear el producto');
-      },
-    });
+  // Método para limpiar el formulario
+  resetForm() {
+    this.name = '';
+    this.price = null;
+    this.description = '';
+    this.available = true;
+    this.category_id = 1;
+    this.images = [];
   }
 }

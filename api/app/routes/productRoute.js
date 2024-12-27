@@ -8,7 +8,11 @@ const router = express.Router();
 
 router.get("/", ProductController.getAll); // Obtener todos los productos
 router.get("/:id", ProductController.getById); // Obtener producto por ID
-router.post("/", ProductController.create, UploadMiddleware.array("images", 5)); // Crear nuevo producto
+router.post(
+  "/",
+  UploadMiddleware.array("images", 5), // Permitir hasta 5 imágenes por producto
+  ProductController.create
+); // Crear nuevo producto
 router.put(
   "/:id",
   ProductController.update,

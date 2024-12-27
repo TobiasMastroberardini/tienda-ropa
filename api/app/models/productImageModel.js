@@ -15,20 +15,18 @@ class ProductImageModel {
     return rows;
   }
 
-  static async addImagesToProduct(images) {
-    const query = `INSERT INTO product_images (product_id, image_url) VALUES ($1, $2) RETURNING *`;
+  static async addImagesToProduct(productId, imageUrls) {
+    const values = imageUrls
+      .map((url, index) => `($1, $${index + 2})`)
+      .join(", ");
+    const query = `INSERT INTO product_images (product_id, imagen_url) VALUES ${values}`;
 
     try {
-      for (const image of images) {
-        await pool.query(query, [image.product_id, image.image_url]);
-        console.log("Imagen insertada:", image);
-      }
+      await pool.query(query, [productId, ...imageUrls]);
     } catch (error) {
-      console.error("Error al insertar imágenes:", error);
-      throw new Error("Failed to insert images into database");
+      throw error;
     }
   }
-
   static async delete(id) {
     const { rows } = await pool.query(
       "DELETE FROM product_images WHERE id = $1 RETURNING *",

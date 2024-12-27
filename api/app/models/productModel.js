@@ -14,19 +14,30 @@ class ProductModel {
   }
 
   static async createProduct(data) {
-    const { images, ...productData } = data; // Excluye las imágenes del producto
-    const columns = Object.keys(productData).join(", ");
-    const values = Object.values(productData);
+    const columns = Object.keys(data).join(", ");
+    const values = Object.values(data);
     const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
 
     const query = `INSERT INTO product (${columns}) VALUES (${placeholders}) RETURNING id`;
 
     try {
       const { rows } = await pool.query(query, values);
-      return rows[0].id; // Devuelve el ID del producto insertado
+      return rows[0].id;
     } catch (error) {
-      console.error("Error al insertar producto:", error);
-      throw new Error("Failed to insert product into database");
+      throw error;
+    }
+  }
+
+  static async addProductImages(productId, imageUrls) {
+    const values = imageUrls
+      .map((url, index) => `($1, $${index + 2})`)
+      .join(", ");
+    const query = `INSERT INTO product_images (product_id, image_url) VALUES ${values}`;
+
+    try {
+      await pool.query(query, [productId, ...imageUrls]);
+    } catch (error) {
+      throw error;
     }
   }
 

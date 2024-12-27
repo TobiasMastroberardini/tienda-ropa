@@ -42,33 +42,23 @@ class ProductController {
   }
 
   static async create(req, res) {
+    const newProduct = req.body;
+    const images = req.files; // Archivos subidos
+
     try {
-      console.log("Inicio del método create");
+      // Crear el producto
+      const productId = await ProductModel.createProduct(newProduct);
 
-      const productData = req.body;
-      console.log("Datos del producto recibidos:", productData);
-
-      // Crear el producto principal
-      const productId = await ProductModel.createProduct(productData);
-      console.log("Producto creado con ID:", productId);
-
-      // Si hay imágenes, agregarlas a la tabla product_images
-      if (req.files && req.files.length > 0) {
-        const images = req.files.map((file) => ({
-          product_id: productId,
-          image_url: file.path, // La ruta del archivo guardado
-        }));
-
-        console.log("Imágenes para insertar:", images);
-
-        await ProductImageModel.addImagesToProduct(images);
-        console.log("Imágenes insertadas correctamente");
+      // Guardar las imágenes si existen
+      if (images && images.length > 0) {
+        const imageUrls = images.map((file) => `/uploads/${file.filename}`);
+        await ProductModel.addProductImages(productId, imageUrls);
       }
 
-      res.status(201).json({ id: productId, ...productData });
+      res.status(201).json({ id: productId, ...newProduct });
     } catch (error) {
-      console.error("Error en el método create:", error);
-      res.status(500).json({ error: "Failed to create product" });
+      console.error("Error al crear el producto:", error);
+      res.status(500).json({ message: "Error al crear el producto" });
     }
   }
 

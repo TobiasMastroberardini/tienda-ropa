@@ -1,34 +1,31 @@
-// config/multer.js
 import multer from "multer";
 import path from "path";
 
-// Definir el almacenamiento para las imágenes
+// Configuración del almacenamiento de imágenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/images"); // Carpeta donde se guardarán las imágenes
+    cb(null, "uploads/"); // Carpeta donde se guardarán las imágenes
   },
   filename: (req, file, cb) => {
-    // Asignar un nombre único a la imagen para evitar colisiones
-    const ext = path.extname(file.originalname);
-    const filename = `${Date.now()}${ext}`;
-    cb(null, filename);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname)); // Generar un nombre único
   },
 });
 
-// Filtrar solo imágenes (JPG, PNG, JPEG)
+// Filtro para permitir solo imágenes
 const fileFilter = (req, file, cb) => {
-  const filetypes = /jpeg|jpg|png|webp/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = filetypes.test(file.mimetype);
-
-  if (extname && mimetype) {
-    return cb(null, true);
+  const allowedTypes = /jpeg|jpg|png|webp/;
+  const isMimeTypeValid = allowedTypes.test(file.mimetype);
+  const isExtValid = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase()
+  );
+  if (isMimeTypeValid && isExtValid) {
+    cb(null, true);
   } else {
-    cb(new Error("Only image files are allowed"));
+    cb(new Error("Solo se permiten imágenes (jpg, jpeg, png)."));
   }
 };
 
-// Configurar el middleware multer
 const upload = multer({ storage, fileFilter });
 
 export default upload;

@@ -136,7 +136,7 @@ class Auth {
   static async getUserLogged(req, res) {
     try {
       const userId = req.userId; // Se obtiene del middleware
-      const user = await UserModel.getUserById(userId); // Busca el usuario por su ID
+      const user = await UserModel.getById(userId); // Busca el usuario por su ID
 
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });

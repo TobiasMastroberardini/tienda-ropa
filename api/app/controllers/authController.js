@@ -74,7 +74,7 @@ class Auth {
 
     try {
       // Buscar el usuario por el email
-      const user = await UserModel.getUserByEmail(email);
+      const user = await UserModel.getByEmail(email);
 
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });

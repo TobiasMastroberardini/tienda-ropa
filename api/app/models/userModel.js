@@ -13,6 +13,13 @@ class UserModel {
     return rows[0];
   }
 
+  static async getByEmail(email) {
+    const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+    return rows[0];
+  }
+
   static async create(data, client = pool) {
     const columns = Object.keys(data).join(", ");
     const values = Object.values(data);

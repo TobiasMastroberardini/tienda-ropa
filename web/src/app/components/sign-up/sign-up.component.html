@@ -26,7 +26,7 @@
         </div>
 
         <div class="mt-8">
-          <form>
+          <form (ngSubmit)="onSubmit()">
             <div>
               <label for="first_name" class="block mb-2 text-sm text-gray-600"
                 >Nombre</label
@@ -36,6 +36,7 @@
                 name="first_name"
                 id="first_name"
                 placeholder="Juan"
+                [(ngModel)]="first_name"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
@@ -49,6 +50,7 @@
                 name="last_name"
                 id="last_name"
                 placeholder="Perez"
+                [(ngModel)]="last_name"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
@@ -62,6 +64,7 @@
                 name="address"
                 id="address"
                 placeholder="Calle 123"
+                [(ngModel)]="address"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
@@ -75,6 +78,7 @@
                 name="email"
                 id="email"
                 placeholder="example@example.com"
+                [(ngModel)]="email"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
@@ -88,6 +92,7 @@
                 name="phone"
                 id="phone"
                 placeholder="12345"
+                [(ngModel)]="phone"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
@@ -101,6 +106,7 @@
                 name="city"
                 id="city"
                 placeholder="Tandil"
+                [(ngModel)]="city"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
@@ -117,25 +123,27 @@
                 name="password"
                 id="password"
                 placeholder="Contraseña"
+                [(ngModel)]="password"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
 
             <div class="mt-6">
               <button
+                type="submit"
                 class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
               >
-                Iniciar
+                Registrarte
               </button>
             </div>
           </form>
 
           <p class="mt-6 text-sm text-center text-gray-400">
-            No tienes cuenta todavia?
+            Ya tienes cuenta?
             <a
-              href="sign-up"
+              href="login"
               class="text-blue-500 focus:outline-none focus:underline hover:underline"
-              >Registrate</a
+              >Iniciar</a
             >.
           </p>
         </div>

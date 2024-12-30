@@ -8,13 +8,13 @@
     <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 lg:grid-cols-2">
       <div *ngFor="let category of categories">
         <div
-          class="flex items-end overflow-hidden bg-cover rounded-lg h-[600px]"
+          class="flex items-end overflow-hidden bg-cover rounded-lg h-[600px] group transform transition-transform duration-300 hover:scale-105"
           style="background-image: url('http://localhost:3000/api{{
             category.image_url
           }}');"
         >
           <div
-            class="w-full px-8 py-4 overflow-hidden rounded-b-lg backdrop-blur-sm bg-white/60 dark:bg-gray-800/60"
+            class="w-full px-8 py-4 overflow-hidden rounded-b-lg backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 group-hover:bg-opacity-80 transition-opacity"
           >
             <h2
               class="mt-4 text-xl font-semibold text-gray-800 capitalize dark:text-white"

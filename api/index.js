@@ -2,12 +2,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import authRoutes from "./app/routes/authRoutes.js";
 import cartItemRoutes from "./app/routes/cartItemRoutes.js";
 import cartRoutes from "./app/routes/cartRoutes.js";
+import categoryRoutes from "./app/routes/categoryRoutes.js";
 import orderItemRoutes from "./app/routes/orderItemRoutes.js";
 import orderRoutes from "./app/routes/orderRoutes.js";
-// import productImageRoutes from "./app/routes/productImageRoutes.js";
-import categoryRoutes from "./app/routes/categoryRoutes.js";
 import productRoutes from "./app/routes/productRoute.js";
 import userRoutes from "./app/routes/userRoutes.js";
 
@@ -21,9 +23,6 @@ app.use(
     origin: "http://localhost:4200", // Permite solicitudes solo desde tu frontend
   })
 );
-
-import { dirname } from "path";
-import { fileURLToPath } from "url";
 
 // Obtener el nombre del archivo actual
 const __filename = fileURLToPath(import.meta.url);
@@ -43,6 +42,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/order_items", orderItemRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/auth", authRoutes);
 
 // Serve static files from uploads
 app.use("/api/uploads", express.static("uploads"));

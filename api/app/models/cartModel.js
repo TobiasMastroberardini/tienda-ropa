@@ -1,4 +1,3 @@
-// models/CartModel.js
 import pool from "../../database/db.js";
 
 class CartModel {
@@ -32,18 +31,19 @@ class CartModel {
     }
   }
 
-  static async create({ user_id }) {
-    const query = `
-      INSERT INTO cart (user_id)
-      VALUES ($1)
-      RETURNING *;
-    `;
-    try {
-      const { rows } = await pool.query(query, [user_id]);
-      return rows[0];
-    } catch (error) {
-      throw error;
+  static async create(user_id, client = pool) {
+    if (!user_id || typeof user_id !== "number") {
+      throw new Error("El ID del usuario debe ser un número válido.");
     }
+
+    const query = `
+    INSERT INTO cart (user_id)
+    VALUES ($1)
+    RETURNING *;
+  `;
+
+    const { rows } = await client.query(query, [user_id]);
+    return rows[0];
   }
 
   static async delete(id) {

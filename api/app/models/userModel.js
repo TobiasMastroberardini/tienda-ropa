@@ -13,18 +13,14 @@ class UserModel {
     return rows[0];
   }
 
-  static async create(data) {
+  static async create(data, client = pool) {
     const columns = Object.keys(data).join(", ");
     const values = Object.values(data);
     const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
     const query = `INSERT INTO users (${columns}) VALUES (${placeholders}) RETURNING *`;
 
-    try {
-      const { rows } = await pool.query(query, values);
-      return rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const { rows } = await client.query(query, values);
+    return rows[0];
   }
 
   static async update(id, data) {

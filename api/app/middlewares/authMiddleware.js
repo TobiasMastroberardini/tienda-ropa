@@ -38,4 +38,4 @@ class authMiddleware {
     next();
   }
 }
-module.exports = authMiddleware;
+export default authMiddleware;

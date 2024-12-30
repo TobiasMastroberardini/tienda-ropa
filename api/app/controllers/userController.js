@@ -1,4 +1,3 @@
-import CartModel from "../models/cartModel.js";
 import UserModel from "../models/userModel.js";
 
 class UserController {
@@ -27,8 +26,6 @@ class UserController {
   static async create(req, res) {
     try {
       const user = await UserModel.create(req.body);
-      const cart = await CartModel.create(user.id);
-
       res.status(201).json(user);
     } catch (error) {
       res.status(500).json({ error: "Failed to create user" });

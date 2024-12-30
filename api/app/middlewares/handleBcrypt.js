@@ -12,4 +12,4 @@ class HandleBcrypt {
   }
 }
 
-module.exports = HandleBcrypt;
+export default HandleBcrypt;

@@ -23,7 +23,14 @@ export class CartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getItems();
+    // Escuchar cambios en cartId$
+    this.CartService.cartId$.subscribe((cartId) => {
+      if (cartId) {
+        this.getItems();
+      }
+    });
+
+    // Escuchar cambios en el estado del carrito
     this.cartStatusSubscription = this.cartStatusService.isOpen$.subscribe(
       (status) => {
         this.isOpen = status;
@@ -32,14 +39,15 @@ export class CartComponent implements OnInit {
   }
 
   getItems() {
+    this.isLoading = true; // Iniciar el estado de carga
     this.CartService.getCartItems().subscribe(
       (data) => {
         this.items = data;
-        this.isLoading = false;
+        this.isLoading = false; // Finaliza la carga
       },
       (error) => {
         console.error('Error fetching items:', error);
-        this.isLoading = false;
+        this.isLoading = false; // Finaliza la carga, incluso si hay error
       }
     );
   }

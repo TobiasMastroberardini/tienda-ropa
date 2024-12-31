@@ -26,7 +26,7 @@ class CartController {
 
   static async getByUserId(req, res) {
     try {
-      const cart = await CartModel.getUserById(req.params.id);
+      const cart = await CartModel.getByUserId(req.params.id);
       if (cart) {
         res.json(cart);
       } else {

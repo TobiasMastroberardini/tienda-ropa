@@ -34,7 +34,7 @@ class ProductModel {
     FROM product p
     LEFT JOIN category c ON p.category_id = c.id
     WHERE 
-        (LOWER(p.name) LIKE LOWER($1) OR LOWER(p.description) LIKE LOWER($1) OR LOWER(c.name) ILIKE LOWER($1)) -- Busca en nombre, descripción y categoría
+        (LOWER(p.name) LIKE LOWER($1) OR LOWER(p.description) LIKE LOWER($1) OR LOWER(c.name) ILIKE LOWER($1))
         AND ($2::numeric IS NULL OR p.price >= $2)
         AND ($3::numeric IS NULL OR p.price <= $3)
     ORDER BY p.name ASC;
@@ -48,7 +48,11 @@ class ProductModel {
 
     try {
       const { rows } = await pool.query(sql, values);
-      return rows;
+      // Devuelve los productos con la imagen asociada
+      return rows.map((product) => ({
+        ...product,
+        images: [{ image_url: product.product_image_url }], // Asegurarse de que 'images' es un array
+      }));
     } catch (error) {
       console.error("Error searching products:", error);
       throw error;

@@ -56,8 +56,22 @@ class ProductController {
         maxPrice: maxPrice || null,
       };
 
+      // Buscar productos con los filtros
       const products = await ProductModel.searchProducts(query, filters);
-      return res.status(200).json(products);
+
+      // Obtener las imágenes asociadas a cada producto
+      const productsWithImages = await Promise.all(
+        products.map(async (product) => {
+          const images = await ProductImageModel.getByProductId(product.id);
+          return {
+            ...product,
+            images: images, // Agregar las imágenes al producto
+          };
+        })
+      );
+
+      // Devolver los productos con las imágenes asociadas
+      return res.status(200).json(productsWithImages);
     } catch (error) {
       console.error("Error en el controlador de búsqueda:", error);
       return res.status(500).json({ error: "Error interno del servidor" });

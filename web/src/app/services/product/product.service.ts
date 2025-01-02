@@ -10,6 +10,12 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  // Método para buscar productos en base al query
+  searchProducts(query: string): Observable<any> {
+    console.log(query);
+    return this.http.get<any[]>(`${this.apiUrl}/search?${query}`);
+  }
+
   getAll(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }

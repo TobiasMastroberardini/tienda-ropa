@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CartStatusService } from '../../services/cart-status/cart-status.service';
 import { CategoryService } from '../../services/category/category.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
@@ -15,10 +17,13 @@ export class NavbarComponent implements OnInit {
   isMobileMenuOpen = false;
   isCategoriesMenuOpen = false;
   isUserMenuOpen = false;
+  @Output() searchQuery: EventEmitter<string> = new EventEmitter();
+  query: string = '';
 
   constructor(
     private cartStatusService: CartStatusService,
-    private categoriesService: CategoryService
+    private categoriesService: CategoryService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +35,14 @@ export class NavbarComponent implements OnInit {
         console.error('Error fetching products:', error);
       }
     );
+  }
+
+  onSearch(): void {
+    if (this.query) {
+      this.router.navigate(['/products'], {
+        queryParams: { query: `=${this.query}` },
+      });
+    }
   }
 
   openCart(): void {

@@ -1,0 +1,10 @@
+.cont {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr auto;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}

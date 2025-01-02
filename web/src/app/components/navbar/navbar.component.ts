@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 import { CartStatusService } from '../../services/cart-status/cart-status.service';
 import { CategoryService } from '../../services/category/category.service';
 
@@ -19,8 +20,10 @@ export class NavbarComponent implements OnInit {
   isUserMenuOpen = false;
   @Output() searchQuery: EventEmitter<string> = new EventEmitter();
   query: string = '';
+  isLogged: boolean = false;
 
   constructor(
+    private authService: AuthService,
     private cartStatusService: CartStatusService,
     private categoriesService: CategoryService,
     private router: Router
@@ -37,17 +40,30 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  onSearch(): void {
+  onSearch(query: string = ''): void {
     if (this.query) {
       this.router.navigate(['/products'], {
         queryParams: { query: `=${this.query}` },
       });
+    } else if (query != '') {
+      this.router.navigate(['/products'], {
+        queryParams: { query: `=${query}` },
+      });
     }
+  }
+
+  setIsLogged() {
+    return this.authService.isLogged();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   openCart(): void {
     this.cartStatusService.openCart();
   }
+
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }

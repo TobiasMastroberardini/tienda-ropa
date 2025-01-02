@@ -56,8 +56,11 @@ class ProductController {
         maxPrice: maxPrice || null,
       };
 
+      // Dividir la consulta en palabras clave
+      const queryWords = query.trim().split(/\s+/); // Divide por espacios
+
       // Buscar productos con los filtros
-      const products = await ProductModel.searchProducts(query, filters);
+      const products = await ProductModel.searchProducts(queryWords, filters);
 
       // Obtener las imágenes asociadas a cada producto
       const productsWithImages = await Promise.all(

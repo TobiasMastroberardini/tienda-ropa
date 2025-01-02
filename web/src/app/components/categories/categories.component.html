@@ -16,11 +16,13 @@
           <div
             class="w-full px-8 py-4 overflow-hidden rounded-b-lg backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 group-hover:bg-opacity-80 transition-opacity"
           >
-            <h2
-              class="mt-4 text-xl font-semibold text-gray-800 capitalize dark:text-white"
-            >
-              {{ category.name }}
-            </h2>
+            <button (click)="onSearch(category.name)">
+              <h2
+                class="mt-4 text-xl font-semibold text-gray-800 capitalize dark:text-white"
+              >
+                {{ category.name }}
+              </h2>
+            </button>
           </div>
         </div>
       </div>

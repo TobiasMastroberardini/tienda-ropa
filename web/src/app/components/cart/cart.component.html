@@ -101,7 +101,7 @@
                               <h3>
                                 <a href="#">{{ item.product_name }}</a>
                               </h3>
-                              <p class="ml-4">${{ item.price }}</p>
+                              <p class="ml-4">${{ item.product_price }}</p>
                             </div>
                             <p class="mt-1 text-sm text-gray-500">Salmon</p>
                           </div>
@@ -114,10 +114,11 @@
 
                             <div class="flex">
                               <button
+                                (click)="removeItem(item)"
                                 type="button"
                                 class="font-medium text-indigo-600 hover:text-indigo-500"
                               >
-                                Remove
+                                Eliminar
                               </button>
                             </div>
                           </div>

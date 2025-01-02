@@ -13,8 +13,21 @@ class ProductModel {
     return rows[0];
   }
 
-  static async searchProducts(query, filters = {}) {
+  static async searchProducts(queryWords, filters = {}) {
     const { minPrice, maxPrice } = filters;
+
+    // Construir la cláusula WHERE dinámica para cada palabra clave
+    let searchConditions = queryWords
+      .map((word, index) => {
+        return `
+            (LOWER(p.name) LIKE LOWER($${index + 1}) 
+            OR LOWER(p.description) LIKE LOWER($${index + 1}) 
+            OR LOWER(c.name) ILIKE LOWER($${index + 1}))
+        `;
+      })
+      .join(" AND ");
+
+    const values = queryWords.map((word) => `%${word}%`); // Buscar cada palabra
 
     const sql = `
     SELECT 
@@ -34,17 +47,18 @@ class ProductModel {
     FROM product p
     LEFT JOIN category c ON p.category_id = c.id
     WHERE 
-        (LOWER(p.name) LIKE LOWER($1) OR LOWER(p.description) LIKE LOWER($1) OR LOWER(c.name) ILIKE LOWER($1))
-        AND ($2::numeric IS NULL OR p.price >= $2)
-        AND ($3::numeric IS NULL OR p.price <= $3)
+        ${searchConditions}
+        AND ($${values.length + 1}::numeric IS NULL OR p.price >= $${
+      values.length + 1
+    })
+        AND ($${values.length + 2}::numeric IS NULL OR p.price <= $${
+      values.length + 2
+    })
     ORDER BY p.name ASC;
-  `;
+    `;
 
-    const values = [
-      `%${query}%`, // Coincidencia parcial en nombre, descripción o categoría
-      minPrice || null, // Filtro opcional por precio mínimo
-      maxPrice || null, // Filtro opcional por precio máximo
-    ];
+    // Agregar filtros de precio al final de los valores
+    values.push(minPrice || null, maxPrice || null);
 
     try {
       const { rows } = await pool.query(sql, values);

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoryService } from '../../services/category/category.service';
 
 @Component({
@@ -14,7 +15,10 @@ export class CategoriesComponent {
 
   isLoading = true;
 
-  constructor(private categoriesServices: CategoryService) {}
+  constructor(
+    private categoriesServices: CategoryService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.categoriesServices.getAll().subscribe(
@@ -27,5 +31,11 @@ export class CategoriesComponent {
         this.isLoading = false; // Cambiar el estado de carga incluso en error
       }
     );
+  }
+
+  onSearch(query: string): void {
+    this.router.navigate(['/products'], {
+      queryParams: { query: `=${query}` },
+    });
   }
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AlertService } from '../alert/alert.service';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -14,7 +15,11 @@ export class CartService {
   public userId$ = new BehaviorSubject<string | null>(null);
   public cartId$ = new BehaviorSubject<number | null>(null);
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {
     this.loadUserIdFromAuthService();
   }
 
@@ -86,10 +91,38 @@ export class CartService {
   }
 
   removeItem(id: number) {
+    console.log('llega aca al service:', id);
+
     return this.http.delete(`${this.itemsUrl}/${id}`).pipe(
+      tap(() => {
+        this.alertService.showAlert('Producto eliminado del carrito', 1); // Alerta de éxito
+      }),
       catchError((error) => {
         console.error('Error removing item:', error);
+        this.alertService.showAlert(
+          'Error al eliminar producto del carrito',
+          2
+        ); // Alerta de error
         return of(null); // Retorna un valor por defecto en caso de error
+      })
+    );
+  }
+
+  addToCart(product_id: number, quantity: number) {
+    const cart_id = this.cartId$.getValue();
+    if (!cart_id) {
+      console.error('Cart ID is not available');
+      this.alertService.showAlert('Carrito no disponible', 2); // Mostrar alerta si no hay ID de carrito
+      return of({ error: 'Cart ID not found' }); // Retorna un observable con error
+    }
+
+    const item = { product_id, quantity, cart_id };
+    return this.http.post(`${this.itemsUrl}`, item).pipe(
+      tap(() => this.alertService.showAlert('Producto agregado al carrito', 1)),
+      catchError((error) => {
+        console.error('Error al agregar producto al carrito:', error);
+        this.alertService.showAlert('Error al agregar producto al carrito', 2);
+        return of({ error: 'Failed to add item to cart' }); // Retorna un observable con error
       })
     );
   }

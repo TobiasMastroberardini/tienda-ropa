@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { CartStatusService } from '../../services/cart-status/cart-status.service';
 import { CartService } from '../../services/cart/cart.service';
 
@@ -16,6 +16,7 @@ export class CartComponent implements OnInit {
   items: any[] = [];
   isLoading = true;
   private cartStatusSubscription!: Subscription;
+  @Output() itemDeleted: EventEmitter<string> = new EventEmitter(); // Evento para notificar al componente padre
 
   constructor(
     private cartStatusService: CartStatusService,
@@ -23,19 +24,14 @@ export class CartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Escuchar cambios en cartId$
-    this.CartService.cartId$.subscribe((cartId) => {
-      if (cartId) {
-        this.getItems();
-      }
+    // Combina las suscripciones
+    this.cartStatusSubscription = combineLatest([
+      this.CartService.cartId$,
+      this.cartStatusService.isOpen$,
+    ]).subscribe(([cartId, status]) => {
+      this.isOpen = status;
+      if (cartId) this.getItems();
     });
-
-    // Escuchar cambios en el estado del carrito
-    this.cartStatusSubscription = this.cartStatusService.isOpen$.subscribe(
-      (status) => {
-        this.isOpen = status;
-      }
-    );
   }
 
   getItems() {
@@ -53,7 +49,18 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(item: any) {
-    this.CartService.removeItem(item.id);
+    // Optimista: actualiza UI inmediatamente
+    const itemIndex = this.items.findIndex((i) => i.id === item.id);
+    if (itemIndex > -1) {
+      this.items.splice(itemIndex, 1);
+    }
+
+    this.CartService.removeItem(item.id).subscribe({
+      error: () => {
+        // Revertir cambios en caso de error
+        this.getItems();
+      },
+    });
   }
 
   ngOnDestroy(): void {

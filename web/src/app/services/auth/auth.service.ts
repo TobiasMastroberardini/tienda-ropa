@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { AlertService } from '../alert/alert.service';
 import { CookieService } from '../cookies/cookie.service';
@@ -13,11 +14,22 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private cookiesService: CookieService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private router: Router
   ) {}
 
   registerUser(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+      tap((response) => {
+        this.alertService.showAlert('Registro exitoso', 1);
+        this.router.navigateByUrl('/');
+      }),
+      catchError((error) => {
+        this.alertService.showAlert('Error en el inicio de sesión', 2);
+        console.error(error);
+        return of(null);
+      })
+    );
   }
 
   login(email: string, password: string): Observable<any> {
@@ -27,11 +39,12 @@ export class AuthService {
         tap((response) => {
           if (response.token) {
             this.cookiesService.setToken(response.token);
-            this.alertService.showAlert('Inicio de sesión exitoso');
+            this.alertService.showAlert('Inicio de sesión exitoso', 1);
+            this.router.navigateByUrl('/');
           }
         }),
         catchError((error) => {
-          this.alertService.showAlert('Error en el inicio de sesión');
+          this.alertService.showAlert('Error en el inicio de sesión', 2);
           console.error(error);
           return of(null);
         })
@@ -40,7 +53,8 @@ export class AuthService {
 
   logout(): void {
     this.cookiesService.deleteToken();
-    this.alertService.showAlert('Has cerrado sesión exitosamente'); // Notificación de cierre de sesión
+    this.alertService.showAlert('Has cerrado sesión exitosamente', 1);
+    this.router.navigateByUrl('/');
   }
 
   // Obtener el usuario logueado
@@ -58,6 +72,10 @@ export class AuthService {
         return of(null);
       })
     );
+  }
+
+  isLogged(): boolean {
+    return !!this.cookiesService.getToken();
   }
 
   // Crear encabezados de autorización

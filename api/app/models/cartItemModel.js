@@ -6,6 +6,7 @@ class CartItemModel {
     SELECT 
       cart_items.*,
       product.name AS product_name,
+      product.price AS product_price, -- Incluye el precio del producto
       (
         SELECT image_url 
         FROM product_images 
@@ -29,6 +30,7 @@ class CartItemModel {
     SELECT 
       cart_items.*,
       product.name AS product_name,
+      product.price AS product_price, -- Incluye el precio del producto
       (
         SELECT image_url 
         FROM product_images 
@@ -53,6 +55,7 @@ class CartItemModel {
     SELECT 
       cart_items.*,
       product.name AS product_name,
+      product.price AS product_price, -- Incluye el precio del producto
       (
         SELECT image_url 
         FROM product_images 

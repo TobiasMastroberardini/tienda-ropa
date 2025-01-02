@@ -32,7 +32,6 @@ export class ProductListComponent implements OnInit {
           .map((key) => `${key}${queryParams[key]}`)
           .join('&');
         this.getByFilter(query);
-        console.log(query);
       }
     });
   }

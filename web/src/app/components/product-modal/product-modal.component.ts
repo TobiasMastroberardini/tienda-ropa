@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CartService } from '../../services/cart/cart.service';
 import { ProductService } from '../../services/product/product.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class ProductModalComponent {
 
   constructor(
     private route: ActivatedRoute, // Para acceder a los parámetros de la URL
-    private productService: ProductService // Para obtener el producto
+    private productService: ProductService, // Para obtener el producto
+    private cartService: CartService
   ) {}
 
   ngOnInit() {
@@ -35,6 +37,21 @@ export class ProductModalComponent {
       (error) => {
         console.error('Error al obtener el producto:', error);
         this.isLoading = false; // Si hay error, detener la carga
+      }
+    );
+  }
+
+  addToCart(productId: number) {
+    console.log('Se envía desde el componente');
+
+    this.cartService.addToCart(productId, 1).subscribe(
+      (response) => {
+        if (response) {
+          console.log('Producto añadido al carrito:', response);
+        }
+      },
+      (error) => {
+        console.error('Error al añadir producto al carrito:', error);
       }
     );
   }

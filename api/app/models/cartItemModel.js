@@ -5,7 +5,13 @@ class CartItemModel {
     const query = `
     SELECT 
       cart_items.*,
-      product.name AS product_name
+      product.name AS product_name,
+      (
+        SELECT image_url 
+        FROM product_images 
+        WHERE product_images.product_id = product.id 
+        LIMIT 1
+      ) AS product_image_url
     FROM cart_items
     INNER JOIN product ON cart_items.product_id = product.id
   `;
@@ -22,7 +28,13 @@ class CartItemModel {
     const query = `
     SELECT 
       cart_items.*,
-      product.name AS product_name
+      product.name AS product_name,
+      (
+        SELECT image_url 
+        FROM product_images 
+        WHERE product_images.product_id = product.id 
+        LIMIT 1
+      ) AS product_image_url
     FROM cart_items
     INNER JOIN product ON cart_items.product_id = product.id
     WHERE cart_items.cart_id = $1
@@ -40,7 +52,13 @@ class CartItemModel {
     const query = `
     SELECT 
       cart_items.*,
-      product.name AS product_name
+      product.name AS product_name,
+      (
+        SELECT image_url 
+        FROM product_images 
+        WHERE product_images.product_id = product.id 
+        LIMIT 1
+      ) AS product_image_url
     FROM cart_items
     INNER JOIN product ON cart_items.product_id = product.id
     WHERE cart_items.id = $1

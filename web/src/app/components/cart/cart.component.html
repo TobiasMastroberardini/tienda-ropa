@@ -84,8 +84,11 @@
                           class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
                         >
                           <img
-                            src="https://tailwindui.com/plus/img/ecommerce-images/shopping-cart-page-04-product-01.jpg"
-                            alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                            [src]="
+                              'http://localhost:3000/api' +
+                              item.product_image_url
+                            "
+                            alt="{{ item.name }}"
                             class="size-full object-cover"
                           />
                         </div>

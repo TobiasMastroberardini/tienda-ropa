@@ -13,6 +13,50 @@ class ProductModel {
     return rows[0];
   }
 
+  static async searchProducts(query, filters = {}) {
+    const { categoryName, minPrice, maxPrice } = filters;
+
+    const sql = `
+      SELECT 
+          p.id,
+          p.name,
+          p.price,
+          p.description,
+          p.available,
+          p.category_id,
+          c.name AS category_name,
+          (
+              SELECT image_url 
+              FROM product_images 
+              WHERE product_images.product_id = p.id 
+              LIMIT 1
+          ) AS product_image_url
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.id
+      WHERE 
+          (LOWER(p.name) LIKE LOWER($1) OR LOWER(p.description) LIKE LOWER($1))
+          AND ($2::text IS NULL OR LOWER(c.name) = LOWER($2))
+          AND ($3::numeric IS NULL OR p.price >= $3)
+          AND ($4::numeric IS NULL OR p.price <= $4)
+      ORDER BY p.name ASC;
+    `;
+
+    const values = [
+      `%${query}%`, // Coincidencia parcial en nombre o descripción
+      categoryName || null, // Filtro opcional por nombre de categoría
+      minPrice || null, // Filtro opcional por precio mínimo
+      maxPrice || null, // Filtro opcional por precio máximo
+    ];
+
+    try {
+      const { rows } = await pool.query(sql, values);
+      return rows;
+    } catch (error) {
+      console.error("Error searching products:", error);
+      throw error;
+    }
+  }
+
   static async createProduct(data) {
     const columns = Object.keys(data).join(", ");
     const values = Object.values(data);

@@ -7,7 +7,10 @@ import ProductImageController from "../models/productImageModel.js";
 const router = express.Router();
 
 router.get("/", ProductController.getAll); // Obtener todos los productos
+router.get("/search", ProductController.search);
+
 router.get("/:id", ProductController.getById); // Obtener producto por ID
+
 router.post(
   "/",
   UploadMiddleware.array("images", 5), // Permitir hasta 5 imágenes por producto

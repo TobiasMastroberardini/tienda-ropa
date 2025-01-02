@@ -41,6 +41,27 @@ class ProductController {
     }
   }
 
+  static async search(req, res) {
+    const { query } = req.query;
+    const filters = {
+      categoryName: req.query.categoryName || null,
+      minPrice: req.query.minPrice || null,
+      maxPrice: req.query.maxPrice || null,
+    };
+
+    if (!query) {
+      return res.status(400).json({ error: "Query parameter is required" });
+    }
+
+    try {
+      const products = await ProductModel.searchProducts(query, filters);
+      return res.status(200).json(products);
+    } catch (error) {
+      console.error("Error in search controller:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
   static async create(req, res) {
     const newProduct = req.body;
     const images = req.files; // Archivos subidos

@@ -2,24 +2,56 @@ import pool from "../../database/db.js";
 
 class CartItemModel {
   static async getAll() {
-    const { rows } = await pool.query("SELECT * FROM cart_items");
-    return rows;
+    const query = `
+    SELECT 
+      cart_items.*,
+      product.name AS product_name
+    FROM cart_items
+    INNER JOIN product ON cart_items.product_id = product.id
+  `;
+    try {
+      const { rows } = await pool.query(query);
+      return rows;
+    } catch (error) {
+      console.error("Error fetching all cart items:", error);
+      throw error;
+    }
   }
 
   static async getByCartId(cartId) {
-    const { rows } = await pool.query(
-      "SELECT * FROM cart_items WHERE cart_id = $1",
-      [cartId]
-    );
-    return rows;
+    const query = `
+    SELECT 
+      cart_items.*,
+      product.name AS product_name
+    FROM cart_items
+    INNER JOIN product ON cart_items.product_id = product.id
+    WHERE cart_items.cart_id = $1
+  `;
+    try {
+      const { rows } = await pool.query(query, [cartId]);
+      return rows;
+    } catch (error) {
+      console.error("Error fetching cart items by cart ID:", error);
+      throw error;
+    }
   }
 
   static async getById(id) {
-    const { rows } = await pool.query(
-      "SELECT * FROM cart_items WHERE id = $1",
-      [id]
-    );
-    return rows;
+    const query = `
+    SELECT 
+      cart_items.*,
+      product.name AS product_name
+    FROM cart_items
+    INNER JOIN product ON cart_items.product_id = product.id
+    WHERE cart_items.id = $1
+  `;
+    try {
+      const { rows } = await pool.query(query, [id]);
+      return rows[0]; // Devuelve solo el primer resultado
+    } catch (error) {
+      console.error("Error fetching cart item by ID:", error);
+      throw error;
+    }
   }
 
   static async create(data) {

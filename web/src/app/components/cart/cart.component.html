@@ -96,9 +96,9 @@
                               class="flex justify-between text-base font-medium text-gray-900"
                             >
                               <h3>
-                                <a href="#">Throwback Hip Bag</a>
+                                <a href="#">{{ item.product_name }}</a>
                               </h3>
-                              <p class="ml-4">$90.00</p>
+                              <p class="ml-4">${{ item.price }}</p>
                             </div>
                             <p class="mt-1 text-sm text-gray-500">Salmon</p>
                           </div>
@@ -146,13 +146,13 @@
               >
                 <p>
                   o
-                  <button
-                    type="button"
+                  <a
+                    href="products"
                     class="font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Seguir viendo productos
                     <span aria-hidden="true"> &rarr;</span>
-                  </button>
+                  </a>
                 </p>
               </div>
             </div>

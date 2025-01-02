@@ -3,6 +3,7 @@ import { CategoriesComponent } from './components/categories/categories.componen
 import { CreateProductComponent } from './components/create-product/create-product.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
@@ -40,5 +41,9 @@ export const routes: Routes = [
   {
     path: 'modal/:id',
     component: ProductModalComponent,
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];

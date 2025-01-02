@@ -42,23 +42,25 @@ class ProductController {
   }
 
   static async search(req, res) {
-    const { query } = req.query;
-    const filters = {
-      categoryName: req.query.categoryName || null,
-      minPrice: req.query.minPrice || null,
-      maxPrice: req.query.maxPrice || null,
-    };
+    const { query, minPrice, maxPrice } = req.query;
 
     if (!query) {
-      return res.status(400).json({ error: "Query parameter is required" });
+      return res
+        .status(400)
+        .json({ error: "El parámetro 'query' es obligatorio" });
     }
 
     try {
+      const filters = {
+        minPrice: minPrice || null,
+        maxPrice: maxPrice || null,
+      };
+
       const products = await ProductModel.searchProducts(query, filters);
       return res.status(200).json(products);
     } catch (error) {
-      console.error("Error in search controller:", error);
-      return res.status(500).json({ error: "Internal server error" });
+      console.error("Error en el controlador de búsqueda:", error);
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
   }
 

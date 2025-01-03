@@ -70,8 +70,11 @@
 
     <!-- Imágenes -->
     <div>
-      <label for="images">Seleccionar Imágenes</label>
+      <label for="images" class="block text-sm text-gray-500"
+        >Seleccionar Imágenes</label
+      >
       <input
+        class="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full placeholder-gray-400/70 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
         type="file"
         id="images"
         (change)="onFileSelected($event)"

@@ -116,37 +116,24 @@
             <fieldset aria-label="Choose a size" class="mt-4">
               <div class="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
                 <!-- Active: "ring-2 ring-indigo-500" -->
-                <label
-                  class="group relative flex cursor-not-allowed items-center justify-center rounded-md border bg-gray-50 px-4 py-3 text-sm font-medium uppercase text-gray-200 hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
-                >
-                  <input
-                    type="radio"
-                    name="size-choice"
-                    value="XXS"
-                    disabled
-                    class="sr-only"
-                  />
-                  <span>XXS</span>
-                  <span
-                    aria-hidden="true"
-                    class="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
+                <div *ngFor="let size of sizes">
+                  <label
+                    class="group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
                   >
-                    <svg
-                      class="absolute inset-0 size-full stroke-2 text-gray-200"
-                      viewBox="0 0 100 100"
-                      preserveAspectRatio="none"
-                      stroke="currentColor"
+                    <input
+                      type="radio"
+                      name="size-choice"
+                      value="{{ size.name }}"
+                      class="sr-only"
+                    />
+                    <span>{{ size.name }}</span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
                     >
-                      <line
-                        x1="0"
-                        y1="100"
-                        x2="100"
-                        y2="0"
-                        vector-effect="non-scaling-stroke"
-                      />
-                    </svg>
-                  </span>
-                </label>
+                    </span>
+                  </label>
+                </div>
                 <!-- Active: "ring-2 ring-indigo-500" -->
               </div>
             </fieldset>

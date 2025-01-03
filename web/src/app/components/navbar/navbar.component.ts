@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CartStatusService } from '../../services/cart-status/cart-status.service';
 import { CategoryService } from '../../services/category/category.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,15 +22,18 @@ export class NavbarComponent implements OnInit {
   @Output() searchQuery: EventEmitter<string> = new EventEmitter();
   query: string = '';
   isLogged: boolean = false;
+  isUserAdmin: boolean = false;
 
   constructor(
     private authService: AuthService,
     private cartStatusService: CartStatusService,
     private categoriesService: CategoryService,
+    private userService: UserService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.setIsAdmin();
     this.categoriesService.getAll().subscribe(
       (data) => {
         this.categories = data; // Asignar los productos obtenidos
@@ -38,6 +42,16 @@ export class NavbarComponent implements OnInit {
         console.error('Error fetching products:', error);
       }
     );
+  }
+
+  getIsAdmin(): boolean {
+    return this.isUserAdmin;
+  }
+
+  setIsAdmin() {
+    this.userService
+      .isAdmin()
+      .subscribe((isAdmin) => (this.isUserAdmin = isAdmin));
   }
 
   onSearch(query: string = ''): void {
@@ -73,6 +87,7 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleUserMenu(): void {
+    this.setIsAdmin();
     this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 }

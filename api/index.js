@@ -11,6 +11,7 @@ import categoryRoutes from "./app/routes/categoryRoutes.js";
 import orderItemRoutes from "./app/routes/orderItemRoutes.js";
 import orderRoutes from "./app/routes/orderRoutes.js";
 import productRoutes from "./app/routes/productRoute.js";
+import sizeRoutes from "./app/routes/sizeRoutes.js";
 import userRoutes from "./app/routes/userRoutes.js";
 
 dotenv.config();
@@ -40,7 +41,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/cart_items", cartItemRoutes);
 app.use("/api/users", userRoutes);
-// app.use("/api/sizes", sizeRoutes);
+app.use("/api/sizes", sizeRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/order_items", orderItemRoutes);
 app.use("/api/categories", categoryRoutes);

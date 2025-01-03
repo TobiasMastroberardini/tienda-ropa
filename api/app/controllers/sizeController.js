@@ -1,4 +1,4 @@
-import ProductModel from "../models/productModel.js";
+// controllers/SizeController.js
 import SizeModel from "../models/sizeModel.js";
 
 class SizeController {
@@ -26,14 +26,14 @@ class SizeController {
 
   static async getByProduct(req, res) {
     try {
-      const size = await SizeModel.getByProduct(req.params.id);
-      if (size) {
-        res.json(size);
+      const sizes = await SizeModel.getByProduct(req.params.id);
+      if (sizes.length > 0) {
+        res.json(sizes);
       } else {
-        res.status(404).json({ error: "Size not found" });
+        res.status(404).json({ error: "No sizes found for this product" });
       }
     } catch (error) {
-      res.status(500).json({ error: "Failed to fetch size" });
+      res.status(500).json({ error: "Failed to fetch sizes for this product" });
     }
   }
 
@@ -61,16 +61,11 @@ class SizeController {
 
   static async delete(req, res) {
     try {
-      const product = await ProductModel.getBySize(req.params.id);
-      if (!product) {
-        const size = await SizeModel.delete(req.params.id);
-        if (size) {
-          res.json({ message: "Size deleted successfully" });
-        } else {
-          res.status(404).json({ error: "Size not found" });
-        }
+      const size = await SizeModel.delete(req.params.id);
+      if (size) {
+        res.json({ message: "Size deleted successfully" });
       } else {
-        res.json({ message: "Size have products" });
+        res.status(404).json({ error: "Size not found" });
       }
     } catch (error) {
       res.status(500).json({ error: "Failed to delete size" });

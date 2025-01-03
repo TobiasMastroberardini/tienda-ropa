@@ -12,12 +12,15 @@ class SizeModel {
     return rows[0];
   }
 
-  static async getByProduct(id) {
+  static async getByProduct(productId) {
     const { rows } = await pool.query(
-      "SELECT * FROM size WHERE product_id = $1",
-      [id]
+      `SELECT s.id, s.name 
+       FROM size s
+       JOIN product_size ps ON s.id = ps.size_id
+       WHERE ps.product_id = $1`,
+      [productId]
     );
-    return rows[0];
+    return rows;
   }
 
   static async create(data) {

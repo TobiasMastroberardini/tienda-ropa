@@ -21,10 +21,9 @@ export class UserService {
     return !!this.cookiesService.getToken();
   }
 
-  // Verificar si el usuario es admin
   isAdmin(): Observable<boolean> {
     return this.authService.getUserLogged().pipe(
-      map((user) => user?.rol === 1), // Comprueba el rol del usuario
+      map((user) => user?.rol === 1),
       catchError((error) => {
         console.error('Error al verificar si es admin:', error);
         return of(false);

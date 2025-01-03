@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../../services/cart/cart.service';
 import { ProductService } from '../../services/product/product.service';
+import { SizesService } from '../../services/sizes/sizes.service';
 
 @Component({
   selector: 'app-product-modal',
@@ -12,19 +13,21 @@ import { ProductService } from '../../services/product/product.service';
   styleUrl: './product-modal.component.scss',
 })
 export class ProductModalComponent {
-  product: any | null = null; // Aquí almacenaremos el producto
-  isLoading = true; // Para mostrar un indicador de carga mientras se obtiene el producto
+  product: any | null = null;
+  sizes: any[] = [];
+  isLoading = true;
 
   constructor(
-    private route: ActivatedRoute, // Para acceder a los parámetros de la URL
-    private productService: ProductService, // Para obtener el producto
-    private cartService: CartService
+    private route: ActivatedRoute,
+    private productService: ProductService,
+    private cartService: CartService,
+    private sizeService: SizesService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      const productId = params['id']; // Obtener la ID del producto desde la URL
-      this.loadProduct(productId); // Llamar a la función para cargar el producto
+      const productId = params['id'];
+      this.loadProduct(productId);
     });
   }
 
@@ -33,12 +36,19 @@ export class ProductModalComponent {
       (data) => {
         this.product = data;
         this.isLoading = false; // El producto se ha cargado
+        this.loadSizes();
       },
       (error) => {
         console.error('Error al obtener el producto:', error);
         this.isLoading = false; // Si hay error, detener la carga
       }
     );
+  }
+
+  loadSizes() {
+    this.sizeService.getByProductId(this.product.id).subscribe((data) => {
+      this.sizes = data;
+    });
   }
 
   addToCart(productId: number) {

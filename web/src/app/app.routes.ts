@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { CategoriesComponent } from './components/categories/categories.component';
+import { CreateCategoryComponent } from './components/create-category/create-category.component';
 import { CreateProductComponent } from './components/create-product/create-product.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
@@ -25,6 +26,10 @@ export const routes: Routes = [
   {
     path: 'new',
     component: CreateProductComponent,
+  },
+  {
+    path: 'create_category',
+    component: CreateCategoryComponent,
   },
   {
     path: 'categories',

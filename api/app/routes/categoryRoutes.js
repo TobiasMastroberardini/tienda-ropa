@@ -1,5 +1,6 @@
 import express from "express";
 import CategoryController from "../controllers/categoryController.js";
+import UploadMiddleware from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
@@ -10,7 +11,11 @@ router.get("/", CategoryController.getCategories);
 router.get("/:id", CategoryController.getCategory);
 
 // Crear una nueva categoría
-router.post("/", CategoryController.createCategory);
+router.post(
+  "/",
+  UploadMiddleware.array("images", 1), // Permitir hasta 5 imágenes por producto
+  CategoryController.createCategory
+);
 
 // Actualizar una categoría existente
 router.put("/:id", CategoryController.updateCategory);

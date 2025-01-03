@@ -1,0 +1,36 @@
+<div class="create-product-container">
+  <h2>Crear Categoria</h2>
+
+  <form (ngSubmit)="createCategory()" #productForm="ngForm">
+    <!-- Nombre del Producto -->
+    <div>
+      <label for="name">Nombre</label>
+      <input
+        type="text"
+        id="name"
+        [(ngModel)]="category.name"
+        name="name"
+        required
+      />
+    </div>
+
+    <!-- Imágenes -->
+    <div>
+      <label for="images">Seleccionar Imágenes</label>
+      <input
+        type="file"
+        id="images"
+        (change)="onFileSelected($event)"
+        multiple
+        accept="image/*"
+      />
+    </div>
+
+    <!-- Botón de envío -->
+    <div>
+      <button type="submit" [disabled]="!productForm.form.valid">
+        Crear Categoría
+      </button>
+    </div>
+  </form>
+</div>

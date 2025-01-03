@@ -25,15 +25,30 @@ class CategoryController {
     }
   }
 
-  // Crear una nueva categoría
   static async createCategory(req, res) {
-    const { name, image_url } = req.body;
-    const data = { name, image_url };
-
     try {
+      console.log("Body:", req.body);
+      console.log("Files:", req.files);
+
+      const { name } = req.body;
+      if (!name) {
+        return res.status(400).json({ message: "Name is required" });
+      }
+
+      const images = req.files;
+      const imageUrls = images
+        ? images.map((file) => `/uploads/${file.filename}`)
+        : [];
+
+      const data = {
+        name,
+        image_url: imageUrls[0] || null,
+      };
+
       const id = await CategoryModel.createCategory(data);
-      res.status(201).json({ id });
+      res.status(201).json({ id, imageUrls });
     } catch (err) {
+      console.error("Error:", err);
       res.status(400).json({ message: err.message });
     }
   }

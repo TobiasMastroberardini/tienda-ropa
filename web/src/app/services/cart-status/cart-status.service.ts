@@ -10,14 +10,6 @@ export class CartStatusService {
 
   constructor() {}
 
-  openCart() {
-    this.isOpenSubject.next(true);
-  }
-
-  closeCart() {
-    this.isOpenSubject.next(false);
-  }
-
   toggleCart() {
     this.isOpenSubject.next(!this.isOpenSubject.value);
   }

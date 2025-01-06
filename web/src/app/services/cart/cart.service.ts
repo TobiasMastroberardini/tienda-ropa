@@ -13,24 +13,26 @@ export class CartService {
   itemsUrl = 'http://localhost:3000/api/cart_items';
 
   public userId$ = new BehaviorSubject<string | null>(null);
-  public cartId$ = new BehaviorSubject<number | null>(null);
+  public cartId$ = new BehaviorSubject<string | null>(null);
 
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     private alertService: AlertService
   ) {
-    this.loadUserIdFromAuthService();
+    this.loadUserIdFromAuthService(); // Suscribirse a los cambios de sesión
+    this.authService.authStatus$.subscribe(() => {
+      this.loadUserIdFromAuthService();
+    });
   }
 
   private setUserId(id: string) {
     this.userId$.next(id);
   }
 
-  private setCartId(id: number) {
+  private setCartId(id: string) {
     this.cartId$.next(id);
   }
-
   private loadUserIdFromAuthService(): void {
     this.authService
       .getUserLogged()
@@ -39,6 +41,9 @@ export class CartService {
           if (user) {
             this.setUserId(user.id);
             this.getCartIdByUserId();
+          } else {
+            this.setUserId('');
+            this.setCartId('');
           }
         }),
         catchError((error) => {
@@ -61,7 +66,7 @@ export class CartService {
       .pipe(
         tap((cart) => {
           if (cart && cart.id) {
-            this.setCartId(cart.id);
+            this.setCartId(cart.id.toString());
             console.log('Cart ID successfully retrieved:', cart.id);
           } else {
             console.log('No cart available or cart ID is missing');

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, Observable, of, Subject, tap } from 'rxjs';
 import { AlertService } from '../alert/alert.service';
 import { CookieService } from '../cookies/cookie.service';
 
@@ -10,6 +10,8 @@ import { CookieService } from '../cookies/cookie.service';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/api/auth';
+
+  public authStatus$ = new Subject<void>();
 
   constructor(
     private http: HttpClient,
@@ -41,6 +43,7 @@ export class AuthService {
             this.cookiesService.setToken(response.token);
             this.alertService.showAlert('Inicio de sesión exitoso', 1);
             this.router.navigateByUrl('/');
+            this.authStatus$.next();
           }
         }),
         catchError((error) => {
@@ -55,6 +58,7 @@ export class AuthService {
     this.cookiesService.deleteToken();
     this.alertService.showAlert('Has cerrado sesión exitosamente', 1);
     this.router.navigateByUrl('/');
+    this.authStatus$.next();
   }
 
   // Obtener el usuario logueado

@@ -57,8 +57,9 @@ export class AuthService {
   logout(): void {
     this.cookiesService.deleteToken();
     this.alertService.showAlert('Has cerrado sesión exitosamente', 1);
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/home');
     this.authStatus$.next();
+    console.log(2);
   }
 
   // Obtener el usuario logueado

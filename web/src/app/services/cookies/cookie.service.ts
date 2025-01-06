@@ -17,5 +17,6 @@ export class CookieService {
 
   deleteToken(): void {
     this.cookies.delete('token');
+    this.cookies.deleteAll();
   }
 }

@@ -68,7 +68,7 @@ export class CartService {
     }
 
     this.http
-      .get<{ id: number; userId: string }>(`${this.cartUrl}/user/${userId}`)
+      .get<{ id: string; userId: string }>(`${this.cartUrl}/user/${userId}`)
       .pipe(
         tap((cart) => {
           if (cart && cart.id) {
@@ -120,6 +120,9 @@ export class CartService {
   }
 
   addToCart(product_id: number, quantity: number) {
+    if (!this.cartId$) {
+      this.getCartIdByUserId();
+    }
     const cart_id = this.cartId$.getValue();
     if (!cart_id) {
       console.error('Cart ID is not available');

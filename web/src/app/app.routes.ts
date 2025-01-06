@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
 import { CreateProductComponent } from './components/create-product/create-product.component';
@@ -46,6 +47,10 @@ export const routes: Routes = [
   {
     path: 'modal/:id',
     component: ProductModalComponent,
+  },
+  {
+    path: 'admin',
+    component: AdminPanelComponent,
   },
   {
     path: '**',

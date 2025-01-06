@@ -2,14 +2,24 @@ import pool from "../../database/db.js";
 
 class ProductModel {
   static async getAll() {
-    const { rows } = await pool.query("SELECT * FROM product");
+    const { rows } = await pool.query(`
+    SELECT p.*, c.name AS category_name 
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+  `);
     return rows;
   }
 
   static async getById(id) {
-    const { rows } = await pool.query("SELECT * FROM product WHERE id = $1", [
-      id,
-    ]);
+    const { rows } = await pool.query(
+      `
+    SELECT p.*, c.name AS category_name 
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+    WHERE p.id = $1
+  `,
+      [id]
+    );
     return rows[0];
   }
 

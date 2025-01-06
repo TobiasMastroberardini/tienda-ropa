@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AlertService } from '../alert/alert.service';
 import { AuthService } from '../auth/auth.service';
@@ -22,7 +22,13 @@ export class CartService {
   ) {
     this.loadUserIdFromAuthService(); // Suscribirse a los cambios de sesión
     this.authService.authStatus$.subscribe(() => {
-      this.loadUserIdFromAuthService();
+      if (authService.isLogged()) {
+        this.loadUserIdFromAuthService();
+        console.log('in');
+      } else {
+        this.userId$.next(null); // Emitir null correctamente
+        this.cartId$.next(null);
+      }
     });
   }
 
@@ -128,6 +134,32 @@ export class CartService {
         console.error('Error al agregar producto al carrito:', error);
         this.alertService.showAlert('Error al agregar producto al carrito', 2);
         return of({ error: 'Failed to add item to cart' }); // Retorna un observable con error
+      })
+    );
+  }
+
+  // Método para actualizar la cantidad de un ítem en el carrito
+  updateQuantity(itemId: string, quantity: number): Observable<any> {
+    const userId = this.userId$.value; // Obtener el valor actual del BehaviorSubject
+
+    if (!userId) {
+      console.error('Error: userId no está definido');
+      return of(null); // Devuelve null si no hay userId
+    }
+
+    const payload = {
+      userId,
+      quantity,
+    };
+
+    return this.http.put<any>(`${this.itemsUrl}/${itemId}`, payload).pipe(
+      tap(() => {
+        this.alertService.showAlert('Cantidad actualizada', 1);
+      }),
+      catchError((error) => {
+        this.alertService.showAlert('Error al actualizar la cantidad', 2);
+        console.error(error);
+        return of(null);
       })
     );
   }

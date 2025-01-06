@@ -1,0 +1,88 @@
+<li class="flex py-6">
+  <div
+    class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
+  >
+    <img
+      [src]="'http://localhost:3000/api' + item.product_image_url"
+      alt="{{ item.name }}"
+      class="size-full object-cover"
+    />
+  </div>
+
+  <div class="ml-4 flex flex-1 flex-col">
+    <div>
+      <div class="flex justify-between text-base font-medium text-gray-900">
+        <h3>
+          <a href="#">{{ item.product_name }}</a>
+        </h3>
+        <p class="ml-4">${{ item.product_price }}</p>
+      </div>
+      <p class="mt-1 text-sm text-gray-500">Salmon</p>
+    </div>
+    <div class="flex flex-1 items-end justify-between text-sm">
+      <div class="flex items-center justify-between md:order-3 md:justify-end">
+        <div class="flex items-center">
+          <button
+            type="button"
+            (click)="decrementQuantity(item)"
+            class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-black hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-gray-100"
+          >
+            <svg
+              class="h-2.5 w-2.5 text-gray-900"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 18 2"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h16"
+              />
+            </svg>
+          </button>
+          <input
+            type="text"
+            id="counter-input"
+            class="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0"
+            [value]="item.quantity"
+            (input)="updateQuantity(item, $event)"
+            required
+          />
+          <button
+            type="button"
+            (click)="incrementQuantity(item)"
+            class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-black hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-gray-100"
+          >
+            <svg
+              class="h-2.5 w-2.5 text-gray-900"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 18 18"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 1v16M1 9h16"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="flex">
+        <button
+          (click)="remove()"
+          type="button"
+          class="font-medium text-indigo-600 hover:text-indigo-500"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</li>

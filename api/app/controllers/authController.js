@@ -77,7 +77,7 @@ class Auth {
       const user = await UserModel.getByEmail(email);
 
       if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(401).json({ message: "Usuario no encontrado" });
       }
 
       // Verificar la contraseña

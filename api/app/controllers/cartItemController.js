@@ -23,11 +23,7 @@ class CartItemController {
   static async getByCartId(req, res) {
     try {
       const cartItems = await CartItemModel.getByCartId(req.params.cartId);
-      if (cartItems.length > 0) {
-        res.json(cartItems);
-      } else {
-        res.status(404).json({ error: "No items found for this cart" });
-      }
+      res.json(cartItems);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch cart items" });
     }
@@ -43,15 +39,37 @@ class CartItemController {
   }
 
   static async update(req, res) {
+    const { id } = req.params;
+    const updatedData = req.body;
+
+    // Validación del ID
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+
+    // Validación de datos actualizados, por ejemplo asegurando que hay un campo "quantity"
+    if (typeof updatedData.quantity !== "number" || updatedData.quantity < 0) {
+      return res
+        .status(400)
+        .json({ message: "Cantidad debe ser un número no negativo" });
+    }
+
     try {
-      const cartItem = await CartItemModel.update(req.params.id, req.body);
-      if (cartItem) {
-        res.json(cartItem);
-      } else {
-        res.status(404).json({ error: "Cart item not found" });
+      const result = await CartItemModel.updateItemQuantity(
+        id,
+        updatedData.quantity
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Item no encontrado" });
       }
+
+      return res.json({ message: "Item actualizado", data: updatedData });
     } catch (error) {
-      res.status(500).json({ error: "Failed to update cart item" });
+      console.error("Error al actualizar item:", error);
+      return res.status(500).json({
+        error: "Error interno del servidor. No se pudo actualizar el item.",
+      });
     }
   }
 

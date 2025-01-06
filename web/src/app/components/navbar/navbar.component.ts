@@ -75,7 +75,7 @@ export class NavbarComponent implements OnInit {
   }
 
   openCart(): void {
-    this.cartStatusService.openCart();
+    this.cartStatusService.toggleCart();
   }
 
   toggleMobileMenu(): void {

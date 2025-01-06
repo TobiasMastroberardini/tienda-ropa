@@ -107,6 +107,18 @@ class CartItemModel {
     }
   }
 
+  static async updateItemQuantity(item_id, quantity) {
+    try {
+      const result = await pool.query(
+        "UPDATE cart_items SET quantity = $1 WHERE id = $2 RETURNING *",
+        [quantity, item_id]
+      );
+      return result.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async delete(id) {
     const { rows } = await pool.query(
       "DELETE FROM cart_items WHERE id = $1 RETURNING *",

@@ -79,51 +79,11 @@
                 <div class="flow-root">
                   <ul role="list" class="-my-6 divide-y divide-gray-200">
                     <div *ngFor="let item of items">
-                      <li class="flex py-6">
-                        <div
-                          class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
-                        >
-                          <img
-                            [src]="
-                              'http://localhost:3000/api' +
-                              item.product_image_url
-                            "
-                            alt="{{ item.name }}"
-                            class="size-full object-cover"
-                          />
-                        </div>
-
-                        <div class="ml-4 flex flex-1 flex-col">
-                          <div>
-                            <div
-                              class="flex justify-between text-base font-medium text-gray-900"
-                            >
-                              <h3>
-                                <a href="#">{{ item.product_name }}</a>
-                              </h3>
-                              <p class="ml-4">${{ item.product_price }}</p>
-                            </div>
-                            <p class="mt-1 text-sm text-gray-500">Salmon</p>
-                          </div>
-                          <div
-                            class="flex flex-1 items-end justify-between text-sm"
-                          >
-                            <p class="text-gray-500">
-                              Cantidad: {{ item.quantity }}
-                            </p>
-
-                            <div class="flex">
-                              <button
-                                (click)="removeItem(item)"
-                                type="button"
-                                class="font-medium text-indigo-600 hover:text-indigo-500"
-                              >
-                                Eliminar
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                      <app-card-cart
+                        [item]="item"
+                        (customAction)="handleCustomAction($event)"
+                      >
+                      </app-card-cart>
                     </div>
                   </ul>
                 </div>
@@ -134,8 +94,8 @@
               <div
                 class="flex justify-between text-base font-medium text-gray-900"
               >
-                <p>Subtotal</p>
-                <p>$262.00</p>
+                <p>Total</p>
+                <p>${{ total }}</p>
               </div>
 
               <div class="mt-6">

@@ -16,7 +16,6 @@ export class CookieService {
   }
 
   deleteToken(): void {
-    this.cookies.delete('token');
-    this.cookies.deleteAll();
+    this.cookies.delete('token', '/'); // El '/' asegura que se elimine en todas las rutas
   }
 }

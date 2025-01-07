@@ -5,6 +5,9 @@
   <main>
     <app-alert></app-alert>
     <app-cart></app-cart>
+    <div *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
     <router-outlet class="router-outlet"></router-outlet>
   </main>
   <footer>

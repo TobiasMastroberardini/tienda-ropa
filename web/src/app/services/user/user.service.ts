@@ -79,6 +79,16 @@ export class UserService {
     );
   }
 
+  getUserName(): Observable<string> {
+    return this.authService.getUserLogged().pipe(
+      map((user) => user?.name || ''), // Extrae el nombre del usuario o una cadena vacía si no existe
+      catchError((error) => {
+        console.error('Error al obtener el nombre del usuario:', error);
+        return of(''); // Devuelve una cadena vacía en caso de error
+      })
+    );
+  }
+
   // Crear encabezados de autorización
   private createAuthHeaders(token: string): HttpHeaders {
     return new HttpHeaders({ Authorization: `Bearer ${token}` });

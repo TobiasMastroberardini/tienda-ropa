@@ -15,6 +15,32 @@ class CategoryModel {
     return rows[0];
   }
 
+  static async getCategoryByCondition(conditions) {
+    try {
+      let query = "SELECT * FROM category";
+      const values = [];
+
+      if (Object.keys(conditions).length > 0) {
+        const whereClauses = Object.entries(conditions).map(
+          ([key, value], index) => {
+            if (typeof value === "string" && key === "name") {
+              values.push(value); // 'REMERA'
+              return `${key} LIKE $${index + 1}`; // LIKE $1
+            }
+            values.push(value);
+            return `${key} = $${index + 1}`; // Para otros campos
+          }
+        );
+        query += " WHERE " + whereClauses.join(" AND ");
+      }
+
+      const { rows } = await pool.query(query, values);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Crear una nueva categoría
   static async createCategory(data) {
     const columns = Object.keys(data).join(", ");

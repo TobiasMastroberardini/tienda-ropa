@@ -69,6 +69,11 @@ export const routes: Routes = [
     canActivate: [AdminGuard],
   },
   {
+    path: 'categories_admin',
+    component: CreateCategoryComponent,
+    canActivate: [AdminGuard],
+  },
+  {
     path: '**',
     component: NotFoundComponent,
   },

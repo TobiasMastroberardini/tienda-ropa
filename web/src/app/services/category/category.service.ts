@@ -14,6 +14,10 @@ export class CategoryService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+  getByFilter(filter: string) {
+    return this.http.get<any>(`${this.apiUrl}/filter?${filter}`);
+  }
+
   create(categoryData: FormData): Observable<any> {
     console.log('esta es la data: ', categoryData);
     return this.http.post<any>(this.apiUrl, categoryData).pipe(
@@ -22,6 +26,19 @@ export class CategoryService {
       }),
       catchError((error) => {
         console.log('Categoria no agregada');
+        console.error(error);
+        return of(null);
+      })
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
+      tap((response) => {
+        console.log('Categoria eliminada correctamente');
+      }),
+      catchError((error) => {
+        console.log('Categoria no eliminada');
         console.error(error);
         return of(null);
       })

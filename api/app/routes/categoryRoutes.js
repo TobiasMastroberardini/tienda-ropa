@@ -7,6 +7,8 @@ const router = express.Router();
 // Obtener todas las categorías
 router.get("/", CategoryController.getCategories);
 
+router.get("/filter", CategoryController.getByFilter);
+
 // Obtener una categoría por id
 router.get("/:id", CategoryController.getCategory);
 

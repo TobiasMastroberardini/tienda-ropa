@@ -25,6 +25,25 @@ class CategoryController {
     }
   }
 
+  static async getByFilter(req, res) {
+    const conditions = { ...req.query }; // Copiar las condiciones de búsqueda desde la URL
+    try {
+      // Modificar condiciones de búsqueda para buscar coincidencias parciales en el nombre
+      if (conditions.name) {
+        conditions.name = `%${conditions.name}%`; // Añadir comodines a la búsqueda por nombre
+      }
+
+      // Llamar al método del modelo con las condiciones
+      const categories = await CategoryModel.getCategoryByCondition(conditions);
+
+      // Responder con los resultados
+      res.status(200).json(categories);
+    } catch (error) {
+      console.error("Error al obtener las Categorias con condiciones:", error);
+      res.status(500).json({ message: "Error al obtener categorias" });
+    }
+  }
+
   static async createCategory(req, res) {
     try {
       console.log("Body:", req.body);

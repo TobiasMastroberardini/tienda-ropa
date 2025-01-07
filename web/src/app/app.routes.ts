@@ -3,12 +3,15 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
 import { CreateProductComponent } from './components/create-product/create-product.component';
+import { EditProductComponent } from './components/edit-product/edit-product.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
+import { ProductsAdminComponent } from './components/products-admin/products-admin.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -25,12 +28,14 @@ export const routes: Routes = [
     component: ProductListComponent,
   },
   {
-    path: 'new',
+    path: 'create_product',
     component: CreateProductComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'create_category',
     component: CreateCategoryComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'categories',
@@ -51,6 +56,17 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminPanelComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'products_admin',
+    component: ProductsAdminComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'edit_product/:id',
+    component: EditProductComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: '**',

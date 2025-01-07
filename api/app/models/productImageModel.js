@@ -35,6 +35,14 @@ class ProductImageModel {
     );
     return rows[0];
   }
+
+  static async deleteImagesByProductId(id) {
+    const { rows } = await pool.query(
+      "DELETE FROM product_images WHERE product_id = $1 RETURNING *",
+      [id]
+    );
+    return rows[0];
+  }
 }
 
 export default ProductImageModel;

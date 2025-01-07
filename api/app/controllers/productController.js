@@ -1,4 +1,5 @@
 // controllers/ProductController.js
+import pool from "../../database/db.js";
 import ProductImageModel from "../models/productImageModel.js";
 import ProductModel from "../models/productModel.js";
 
@@ -103,31 +104,46 @@ class ProductController {
   }
 
   static async update(req, res) {
+    const client = await pool.connect(); // Iniciar una transacción
+    const { id } = req.params;
+    console.log("Body: ", req.body);
+    const { name, description, price, category_id, available } = req.body;
+    const images = req.files; // Archivos de imágenes subidos
+
     try {
-      const product = await ProductModel.update(req.params.id, req.body);
+      await client.query("BEGIN"); // Iniciar la transacción
 
-      if (product) {
-        // Actualizar las imágenes si se envían nuevas
-        if (req.files && req.files.length > 0) {
-          // Eliminar las imágenes existentes
-          await ProductImageModel.deleteImagesByProductId(req.params.id);
-
-          // Agregar las nuevas imágenes
-          const images = req.files.map((file) => {
-            return {
-              productId: product.id,
-              imageUrl: `uploads/images/${file.filename}`,
-            };
-          });
-          await ProductImageModel.addImagesToProduct(images);
-        }
-
-        res.json(product);
-      } else {
-        res.status(404).json({ error: "Product not found" });
+      // Paso 1: Actualizar el producto
+      const updatedProduct = await ProductModel.updateProduct(
+        id,
+        { name, description, price, category_id, available },
+        client
+      );
+      if (!updatedProduct) {
+        return res.status(404).json({ error: "Product not found" });
       }
+
+      // Paso 2: Eliminar las imágenes existentes
+      await ProductImageModel.deleteImagesByProductId(id, client);
+
+      // Paso 3: Agregar las nuevas imágenes
+      if (images && images.length > 0) {
+        const imageUrls = images.map(
+          (file) => `/uploads/images/${file.filename}`
+        );
+        await ProductImageModel.addImagesToProduct(id, imageUrls, client);
+      }
+
+      await client.query("COMMIT"); // Confirmar la transacción
+
+      // Responder con el producto actualizado
+      res.json(updatedProduct);
     } catch (error) {
+      await client.query("ROLLBACK"); // Revertir la transacción en caso de error
+      console.error("Error al actualizar el producto:", error);
       res.status(500).json({ error: "Failed to update product" });
+    } finally {
+      client.release(); // Liberar el cliente de la conexión
     }
   }
 

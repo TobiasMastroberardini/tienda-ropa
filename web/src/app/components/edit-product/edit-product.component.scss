@@ -1,0 +1,12 @@
+/* Para las imágenes previas */
+.image-preview {
+  display: flex;
+  gap: 1rem;
+}
+
+.preview-image {
+  border-radius: 0.5rem;
+  width: 6rem;
+  height: 6rem;
+  object-fit: cover;
+}

@@ -104,10 +104,9 @@ class ProductController {
 
   static async update(req, res) {
     const { id } = req.params;
-    const { name, price, description, category_id, available } = req.body;
+    const updatedData = req.body; // Datos enviados en la solicitud
     const images = req.files; // Imágenes cargadas (si las hay)
-    console.log({ name, price, description, category_id, available });
-    console.log("imagenes: ", images);
+    console.log(updatedData);
     try {
       // Validar ID del producto
       if (!id || isNaN(Number(id))) {
@@ -115,13 +114,7 @@ class ProductController {
       }
 
       // Actualizar los datos del producto
-      const affectedRows = await ProductModel.updateProduct(id, {
-        name,
-        price,
-        description,
-        category_id,
-        available,
-      });
+      const affectedRows = await ProductModel.updateProduct(id, updatedData);
 
       if (affectedRows === 0) {
         return res.status(404).json({ message: "Producto no encontrado" });

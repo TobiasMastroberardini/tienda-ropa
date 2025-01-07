@@ -99,19 +99,16 @@ class ProductModel {
   }
 
   static async updateProduct(id, data) {
-    const columns = Object.keys(data);
-    const setClause = columns
-      .map((col, index) => `${col} = $${index + 1}`)
+    const updates = Object.entries(data)
+      .map(([key, _], index) => `${key} = $${index + 1}`)
       .join(", ");
     const values = [...Object.values(data), id];
 
-    const query = `UPDATE product SET ${setClause} WHERE id = $${
-      columns.length + 1
-    } RETURNING *`;
+    const query = `UPDATE product SET ${updates} WHERE id = $${values.length}`;
 
     try {
-      const { rows } = await pool.query(query, values);
-      return rows[0];
+      const { rowCount } = await pool.query(query, values);
+      return rowCount;
     } catch (error) {
       throw error;
     }

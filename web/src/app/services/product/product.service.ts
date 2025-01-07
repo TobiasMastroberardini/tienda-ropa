@@ -56,11 +56,7 @@ export class ProductService {
     );
   }
 
-  updateProduct(
-    productId: number,
-    productData: FormData,
-    selectedImages: File[]
-  ): Observable<any> {
+  updateProduct(productId: number, productData: FormData): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${productId}`, productData).pipe(
       tap((response) => {
         console.log('Producto agregado correctamente');

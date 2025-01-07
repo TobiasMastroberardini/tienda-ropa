@@ -73,7 +73,6 @@ export class EditProductComponent implements OnInit {
     formData.append('category_id', this.product.category_id.toString());
     formData.append('available', this.product.available); // Asegúrate que el backend acepta '1'/'0'
 
-    // Agregar imágenes si se seleccionaron
     this.selectedImages.forEach((image) => {
       formData.append('images', image, image.name); // 'images' es el nombre del campo de archivos
     });
@@ -85,7 +84,7 @@ export class EditProductComponent implements OnInit {
 
     // Si no se ha seleccionado ninguna imagen, se procede con el producto sin imágenes
     this.productService
-      .updateProduct(this.product.id, this.product, this.selectedImages) // Asegúrate de pasar this.selectedImages
+      .updateProduct(this.product.id, formData) // Asegúrate de pasar this.selectedImages
       .subscribe(
         () => {
           alert('Producto actualizado exitosamente');

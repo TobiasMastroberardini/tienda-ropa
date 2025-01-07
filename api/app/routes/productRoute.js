@@ -16,10 +16,11 @@ router.post(
   UploadMiddleware.array("images", 5), // Permitir hasta 5 imágenes por producto
   ProductController.create
 ); // Crear nuevo producto
+
 router.put(
   "/:id",
-  ProductController.update,
-  UploadMiddleware.array("images", 5)
+  UploadMiddleware.array("images", 5),
+  ProductController.update
 ); // Actualizar producto
 router.delete("/:id", ProductController.delete); // Eliminar producto
 router.patch("/:id/available", ProductController.available); // Cambiar disponibilidad

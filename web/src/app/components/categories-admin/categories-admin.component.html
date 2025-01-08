@@ -5,7 +5,12 @@
 
     <!-- Contenedor de los dos componentes alineados horizontalmente en el centro y a la misma altura -->
     <div class="flex items-center gap-x-3">
-      <app-create-category></app-create-category>
+      <app-go-back></app-go-back>
+      <a
+        class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+        href="create_category"
+        >Crear categoria</a
+      >
       <!-- <app-input-admin [search]="categoryList"></app-input-admin> -->
     </div>
   </div>
@@ -38,8 +43,8 @@
                   class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap"
                 >
                   <div class="inline-flex items-center gap-x-3">
-                    <h2 class="font-medium text-gray-800">
-                      {{ category.nombre }}
+                    <h2 class="font-medium text-gray-800 uppercase">
+                      {{ category.name }}
                     </h2>
                   </div>
                 </td>

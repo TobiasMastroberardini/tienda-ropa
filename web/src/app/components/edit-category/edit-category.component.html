@@ -3,7 +3,7 @@
   <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg max-w-3xl">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Crear Categoria</h2>
 
-    <form (ngSubmit)="createCategory()" #productForm="ngForm">
+    <form (ngSubmit)="updateCategory()" #productForm="ngForm">
       <!-- Nombre del Producto -->
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700" for="name"
@@ -17,6 +17,18 @@
           name="name"
           required
         />
+      </div>
+
+      <!-- Imágenes actuales -->
+      <div class="mb-4">
+        <h4 class="text-sm font-medium text-gray-700">Imágenes actuales:</h4>
+        <div class="flex space-x-2 mt-2">
+          <img
+            [src]="'http://localhost:3000/api' + category.image_url"
+            alt="Imagen del producto"
+            class="h-24 w-24 object-cover rounded-md"
+          />
+        </div>
       </div>
 
       <!-- Imágenes -->
@@ -41,7 +53,7 @@
           type="submit"
           [disabled]="!productForm.form.valid"
         >
-          Crear Categoría
+          Editar Categoría
         </button>
       </div>
     </form>

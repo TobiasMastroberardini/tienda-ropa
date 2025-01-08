@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Product } from '../../models/productInteface';
 import { CategoryService } from '../../services/category/category.service';
 import { ProductService } from '../../services/product/product.service';
+import { GoBackComponent } from '../go-back/go-back.component';
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, GoBackComponent],
   templateUrl: './create-product.component.html',
   styleUrls: ['./create-product.component.scss'],
 })
@@ -27,7 +29,8 @@ export class CreateProductComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +65,7 @@ export class CreateProductComponent implements OnInit {
       (response) => {
         console.log('Producto creado satisfactoriamente:', response);
         this.resetForm(); // Limpiar el formulario después de enviar
+        this.router.navigate(['/products_admin']);
       },
       (error) => {
         console.error('Error al crear producto', error);

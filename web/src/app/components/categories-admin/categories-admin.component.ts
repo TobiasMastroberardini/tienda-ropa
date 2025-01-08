@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../services/category/category.service';
-import { CreateCategoryComponent } from '../create-category/create-category.component';
+import { GoBackComponent } from '../go-back/go-back.component';
 
 @Component({
   selector: 'app-categories-admin',
   standalone: true,
-  imports: [CommonModule, CreateCategoryComponent],
+  imports: [CommonModule, GoBackComponent],
   templateUrl: './categories-admin.component.html',
   styleUrl: './categories-admin.component.scss',
 })

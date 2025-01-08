@@ -1,93 +1,114 @@
-<div class="create-product-container">
-  <h2>Crear Producto</h2>
+<div>
+  <app-go-back></app-go-back>
+  <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg max-w-3xl">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Crear Producto</h2>
+    <form (ngSubmit)="createProduct()" #productForm="ngForm">
+      <!-- Nombre del Producto -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700" for="name"
+          >Nombre</label
+        >
+        <input
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+          type="text"
+          id="name"
+          [(ngModel)]="product.name"
+          name="name"
+          required
+        />
+      </div>
 
-  <form (ngSubmit)="createProduct()" #productForm="ngForm">
-    <!-- Nombre del Producto -->
-    <div>
-      <label for="name">Nombre</label>
-      <input
-        type="text"
-        id="name"
-        [(ngModel)]="product.name"
-        name="name"
-        required
-      />
-    </div>
+      <!-- Precio -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700" for="price"
+          >Precio</label
+        >
+        <input
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+          type="number"
+          id="price"
+          [(ngModel)]="product.price"
+          name="price"
+          required
+        />
+      </div>
 
-    <!-- Precio -->
-    <div>
-      <label for="price">Precio</label>
-      <input
-        type="number"
-        id="price"
-        [(ngModel)]="product.price"
-        name="price"
-        required
-      />
-    </div>
+      <!-- Descripción -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700" for="description"
+          >Descripción</label
+        >
+        <textarea
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+          id="description"
+          [(ngModel)]="product.description"
+          name="description"
+          required
+        ></textarea>
+      </div>
 
-    <!-- Descripción -->
-    <div>
-      <label for="description">Descripción</label>
-      <textarea
-        id="description"
-        [(ngModel)]="product.description"
-        name="description"
-        required
-      ></textarea>
-    </div>
+      <!-- Estado -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700" for="available"
+          >Estado</label
+        >
+        <select
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+          id="available"
+          [(ngModel)]="product.available"
+          name="available"
+          required
+        >
+          <option [ngValue]="true">Disponible</option>
+          <option [ngValue]="false">No Disponible</option>
+        </select>
+      </div>
 
-    <!-- Estado -->
-    <div>
-      <label for="available">Estado</label>
-      <select
-        id="available"
-        [(ngModel)]="product.available"
-        name="available"
-        required
-      >
-        <option [ngValue]="true">Disponible</option>
-        <option [ngValue]="false">No Disponible</option>
-      </select>
-    </div>
+      <!-- Cantidad Disponible -->
 
-    <!-- Cantidad Disponible -->
+      <!-- Categoría -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700" for="categoria"
+          >Categoría</label
+        >
+        <select
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+          id="categoria"
+          [(ngModel)]="product.category_id"
+          name="categoria"
+          required
+        >
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
 
-    <!-- Categoría -->
-    <div>
-      <label for="categoria">Categoría</label>
-      <select
-        id="categoria"
-        [(ngModel)]="product.category_id"
-        name="categoria"
-        required
-      >
-        <option *ngFor="let category of categories" [value]="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
+      <!-- Imágenes -->
+      <div class="mb-4">
+        <label for="images" class="block text-sm text-gray-500"
+          >Seleccionar Imágenes</label
+        >
+        <input
+          class="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full"
+          type="file"
+          id="images"
+          (change)="onFileSelected($event)"
+          multiple
+          accept="image/*"
+        />
+      </div>
 
-    <!-- Imágenes -->
-    <div>
-      <label for="images" class="block text-sm text-gray-500"
-        >Seleccionar Imágenes</label
-      >
-      <input
-        class="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full placeholder-gray-400/70 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-        type="file"
-        id="images"
-        (change)="onFileSelected($event)"
-        multiple
-        accept="image/*"
-      />
-    </div>
-
-    <!-- Botón de envío -->
-    <div>
-      <button type="submit" [disabled]="!productForm.form.valid">
-        Crear Producto
-      </button>
-    </div>
-  </form>
+      <!-- Botón de envío -->
+      <div class="mt-6">
+        <button
+          class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
+          type="submit"
+          [disabled]="!productForm.form.valid"
+        >
+          Crear Producto
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

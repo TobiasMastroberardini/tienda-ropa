@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { CategoriesAdminComponent } from './components/categories-admin/categories-admin.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
 import { CreateProductComponent } from './components/create-product/create-product.component';
@@ -70,7 +71,7 @@ export const routes: Routes = [
   },
   {
     path: 'categories_admin',
-    component: CreateCategoryComponent,
+    component: CategoriesAdminComponent,
     canActivate: [AdminGuard],
   },
   {

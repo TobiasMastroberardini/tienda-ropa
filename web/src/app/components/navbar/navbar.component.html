@@ -118,10 +118,9 @@
                   *ngFor="let category of categories"
                   (click)="onSearch(category.name)"
                   (click)="toggleCategoriesMenu()"
-                  class="block px-4 py-2 text-sm text-gray-700"
+                  class="block px-4 py-2 text-sm text-gray-700 uppercase"
                   role="menuitem"
-                  ta
-                  bindex="-1"
+                  tabindex="-1"
                   id="category-menu-item-{{ category.id }}"
                 >
                   {{ category.name }}
@@ -321,12 +320,10 @@
         <!-- Active: "bg-gray-100 outline-none", Not Active: "" -->
         <button
           *ngFor="let category of categories"
-          (click)="onSearch(category.name)"
-          (click)="toggleCategoriesMenu()"
-          class="block px-4 py-2 text-sm text-gray-700"
+          (click)="onSearch(category.name); toggleCategoriesMenu()"
+          class="block px-4 py-2 text-sm text-gray-700 uppercase"
           role="menuitem"
-          ta
-          bindex="-1"
+          tabindex="-1"
           id="category-menu-item-{{ category.id }}"
         >
           {{ category.name }}

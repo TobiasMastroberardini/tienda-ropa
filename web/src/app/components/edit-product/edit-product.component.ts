@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../services/category/category.service';
 import { ProductService } from '../../services/product/product.service';
+import { GoBackComponent } from '../go-back/go-back.component';
 
 @Component({
   selector: 'app-edit-product',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, GoBackComponent],
   templateUrl: './edit-product.component.html',
   styleUrl: './edit-product.component.scss',
 })

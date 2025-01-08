@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product/product.service';
+import { GoBackComponent } from '../go-back/go-back.component';
 
 @Component({
   selector: 'app-products-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, GoBackComponent],
   templateUrl: './products-admin.component.html',
   styleUrl: './products-admin.component.scss',
 })

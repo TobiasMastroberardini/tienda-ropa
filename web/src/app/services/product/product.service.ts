@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { AlertService } from '../alert/alert.service';
-import { CookieService } from '../cookies/cookie.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +9,7 @@ import { CookieService } from '../cookies/cookie.service';
 export class ProductService {
   apiUrl = 'http://localhost:3000/api/products';
 
-  constructor(
-    private http: HttpClient,
-    private alertService: AlertService,
-    private cookieService: CookieService
-  ) {}
+  constructor(private http: HttpClient, private alertService: AlertService) {}
 
   // Método para buscar productos en base al query
   searchProducts(query: string): Observable<any> {
@@ -33,10 +28,10 @@ export class ProductService {
   createProduct(productData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, productData).pipe(
       tap((response) => {
-        console.log('Producto agregado correctamente');
+        this.alertService.showAlert('Producto agregado correctamente', 1);
       }),
       catchError((error) => {
-        console.log('Producto no agregado');
+        this.alertService.showAlert('Ocurrio un error al agregar producto', 2);
         console.error(error);
         return of(null);
       })
@@ -46,10 +41,10 @@ export class ProductService {
   delete(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
       tap((response) => {
-        console.log('Producto eliminado correctamente');
+        this.alertService.showAlert('Producto eliminado correctamente', 1);
       }),
       catchError((error) => {
-        console.log('Producto no eliminado');
+        this.alertService.showAlert('Ocurrio un error al eliminar producto', 2);
         console.error(error);
         return of(null);
       })
@@ -59,10 +54,10 @@ export class ProductService {
   updateProduct(productId: number, productData: FormData): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${productId}`, productData).pipe(
       tap((response) => {
-        console.log('Producto agregado correctamente');
+        this.alertService.showAlert('Producto editado correctamente', 1);
       }),
       catchError((error) => {
-        console.log('Producto no agregado');
+        this.alertService.showAlert('Ocurrio un error al editar producto', 2);
         console.error(error);
         return of(null);
       })

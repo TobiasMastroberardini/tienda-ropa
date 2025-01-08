@@ -48,4 +48,17 @@ export class CategoryService {
       })
     );
   }
+
+  update(id: number, categoryData: FormData) {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, categoryData).pipe(
+      tap((response) => {
+        console.log('Categoria eliminada correctamente');
+      }),
+      catchError((error) => {
+        console.log('Categoria no eliminada');
+        console.error(error);
+        return of(null);
+      })
+    );
+  }
 }

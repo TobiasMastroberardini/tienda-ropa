@@ -65,9 +65,7 @@ class CategoryModel {
       .join(", ");
     const values = [...Object.values(data), id];
 
-    const query = `UPDATE category SET ${setClause} WHERE id = $${
-      columns.length + 1
-    } RETURNING *`;
+    const query = `UPDATE category SET ${setClause} WHERE id = $${values.length} RETURNING *`;
 
     try {
       const { rows } = await pool.query(query, values);
@@ -84,6 +82,16 @@ class CategoryModel {
       [id]
     );
     return rows[0];
+  }
+
+  static async deleteCategoryImage(id) {
+    const query = "UPDATE category SET image_url = NULL WHERE id = $1";
+
+    try {
+      await pool.query(query, [id]);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

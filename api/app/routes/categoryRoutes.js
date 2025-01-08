@@ -20,7 +20,11 @@ router.post(
 );
 
 // Actualizar una categoría existente
-router.put("/:id", CategoryController.updateCategory);
+router.put(
+  "/:id",
+  UploadMiddleware.array("images", 1),
+  CategoryController.updateCategory
+);
 
 // Eliminar una categoría
 router.delete("/:id", CategoryController.deleteCategory);

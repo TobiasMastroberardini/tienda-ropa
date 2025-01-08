@@ -76,15 +76,26 @@ class CategoryController {
   static async updateCategory(req, res) {
     const { id } = req.params;
     const { name } = req.body;
-    const data = { name };
+    const images = req.files;
+    let data = { name };
 
     try {
+      // Si hay imágenes, las actualizamos también
+      if (images && images.length > 0) {
+        CategoryModel.deleteCategoryImage(id);
+        const imageUrls = images.map((file) => `/uploads/${file.filename}`);
+        data.image_url = imageUrls[0]; // Actualizamos la imagen
+      }
+
+      // Solo actualizamos si al menos un campo es proporcionado
       const updatedCategory = await CategoryModel.updateCategory(id, data);
       if (!updatedCategory) {
         return res.status(404).json({ message: "Categoría no encontrada" });
       }
+
       res.json(updatedCategory);
     } catch (err) {
+      console.error("Error:", err);
       res.status(400).json({ message: err.message });
     }
   }

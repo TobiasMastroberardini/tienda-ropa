@@ -30,37 +30,41 @@ export class EditCategoryComponent implements OnInit {
             this.category = data; // Precarga los datos del producto
           } else {
             console.error('Categoria no encontrado');
-            this.router.navigate(['/products_admin']); // Redirige si no se encuentra el producto
+            this.router.navigate(['/categories_admin']); // Redirige si no se encuentra el producto
           }
         },
         error: (err) => {
           console.error('Error al obtener la categoria:', err);
-          this.router.navigate(['/products_admin']); // Maneja errores
+          this.router.navigate(['/categories_admin']); // Maneja errores
         },
       });
     } else {
       console.error('ID de la categoria no válido');
-      this.router.navigate(['/products_admin']); // Redirige si no hay ID válido
+      this.router.navigate(['/categories_admin']); // Redirige si no hay ID válido
     }
   }
 
   updateCategory() {
     const formData = new FormData();
     formData.append('name', this.category.name);
-    this.category.images.forEach((file: string | Blob) => {
-      formData.append('images', file); // El nombre 'images' debe coincidir con el backend
-    });
+    if (this.category.images && this.category.images.length > 0) {
+      this.category.images.forEach((file: string | Blob) => {
+        formData.append('images', file); // El nombre 'images' debe coincidir con el backend
+      });
+    }
 
     // Enviar los datos al servicio
-    this.categoryService.create(formData).subscribe(
-      (response) => {
-        console.log('Categoria creada satisfactoriamente:', response);
-        this.resetForm(); // Limpiar el formulario después de enviar
-      },
-      (error) => {
-        console.error('Error al crear categoria', error);
-      }
-    );
+    this.categoryService
+      .update(this.category.id, formData) // Asegúrate de pasar this.selectedImages
+      .subscribe(
+        () => {
+          this.router.navigate(['/categories_admin']);
+        },
+        (error) => {
+          console.error('Error al actualizar producto:', error);
+          alert('Hubo un error al actualizar el producto.');
+        }
+      );
   }
 
   // Manejar la selección de archivos

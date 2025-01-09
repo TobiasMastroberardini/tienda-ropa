@@ -3,12 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../models/productInteface';
 import { ProductService } from '../../services/product/product.service';
+import { LoaderComponent } from '../loader/loader.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [ProductCardComponent, CommonModule],
+  imports: [ProductCardComponent, CommonModule, LoaderComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
 })

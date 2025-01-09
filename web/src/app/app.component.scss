@@ -8,3 +8,8 @@ main {
   display: flex;
   flex-direction: column;
 }
+
+.header,
+.footer {
+  z-index: 20;
+}

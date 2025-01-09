@@ -12,3 +12,7 @@
   cursor: not-allowed; /* Cambia el cursor a uno de "no permitido" */
   background-color: #ccc; /* Cambia el color de fondo para hacerlo más claro */
 }
+
+.cart {
+  z-index: 30;
+}

@@ -129,6 +129,24 @@ class ProductModel {
     }
   }
 
+  static async getPricesByIds(productIds) {
+    try {
+      // Convertir el array de IDs en una lista separada por comas para la consulta SQL
+      const query = `
+        SELECT id, price
+        FROM product
+        WHERE id = ANY($1::int[])
+      `;
+      const values = [productIds];
+
+      const result = await pool.query(query, values);
+      return result.rows; // Devuelve un array de objetos [{ id: 1, price: 100 }, ...]
+    } catch (error) {
+      console.error("Error al obtener precios de los productos:", error);
+      throw new Error("Error al obtener precios de los productos");
+    }
+  }
+
   static async delete(id) {
     const { rows } = await pool.query(
       "DELETE FROM product WHERE id = $1 RETURNING *",

@@ -11,25 +11,18 @@ import { GoBackComponent } from '../go-back/go-back.component';
   styleUrl: '../create-product/create-product.component.scss',
 })
 export class CreateCategoryComponent {
-  // Usar la interfaz Product para tipar el producto
   category: any = {
     name: '',
     images: [],
   };
 
-  // Lista de categorías (esto puede venir de una API)
   categories: any[] = [];
 
   constructor(private categoryService: CategoryService) {}
 
-  // Crear producto usando FormData
   createCategory() {
     const formData = new FormData();
-
-    // Agregar los datos del producto al FormData
     formData.append('name', this.category.name);
-
-    // Agregar las imágenes al FormData
     this.category.images.forEach((file: string | Blob) => {
       formData.append('images', file); // El nombre 'images' debe coincidir con el backend
     });

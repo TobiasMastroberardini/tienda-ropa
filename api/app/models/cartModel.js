@@ -31,6 +31,18 @@ class CartModel {
     }
   }
 
+  static async getCartIdByuserId(user_id) {
+    try {
+      const result = await pool.query(
+        "SELECT id FROM cart WHERE user_id = $1 LIMIT 1",
+        [user_id]
+      );
+      return result.rows[0]; // Retorna el primer resultado (el ID del carrito)
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async create(user_id, client = pool) {
     if (!user_id || typeof user_id !== "number") {
       throw new Error("El ID del usuario debe ser un número válido.");

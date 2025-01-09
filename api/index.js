@@ -10,6 +10,7 @@ import cartRoutes from "./app/routes/cartRoutes.js";
 import categoryRoutes from "./app/routes/categoryRoutes.js";
 import orderItemRoutes from "./app/routes/orderItemRoutes.js";
 import orderRoutes from "./app/routes/orderRoutes.js";
+import paymentRoutes from "./app/routes/paymentRoutes.js";
 import productRoutes from "./app/routes/productRoute.js";
 import sizeRoutes from "./app/routes/sizeRoutes.js";
 import userRoutes from "./app/routes/userRoutes.js";
@@ -46,6 +47,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/order_items", orderItemRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Serve static files from uploads
 app.use("/api/uploads", express.static("uploads"));

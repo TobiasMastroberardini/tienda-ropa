@@ -126,6 +126,18 @@ class CartItemModel {
     );
     return rows[0];
   }
+
+  static async clearCart(cart_id) {
+    try {
+      const result = await pool.query(
+        "DELETE FROM cart_items WHERE cart_id = $1",
+        [cart_id]
+      );
+      return result.rowCount;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default CartItemModel;

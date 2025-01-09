@@ -4,6 +4,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth/auth.service';
 import { CartStatusService } from '../../services/cart-status/cart-status.service';
 import { CartService } from '../../services/cart/cart.service';
+import { PaymentService } from '../../services/payment/payment.service';
 import { CardCartComponent } from '../card-cart/card-cart.component';
 
 @Component({
@@ -17,13 +18,14 @@ export class CartComponent implements OnInit {
   isOpen = false; // Estado local
   items: any[] = [];
   isLoading = true;
-  total = 0;
+  total: number = 0;
   private cartStatusSubscription!: Subscription;
 
   constructor(
     private cartStatusService: CartStatusService,
     private CartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private paymentService: PaymentService
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +36,7 @@ export class CartComponent implements OnInit {
     ]).subscribe(([cartId, status]) => {
       this.isOpen = status;
       if (cartId) this.getItems();
+      this.calculateTotal();
     });
     this.authService.authStatus$.subscribe(() => {
       this.clearCart();
@@ -92,6 +95,18 @@ export class CartComponent implements OnInit {
     this.total = this.items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
+    );
+  }
+
+  buy() {
+    this.paymentService.createPayment().subscribe(
+      (response) => {
+        window.location.href = response.init_point; // Redirige a la URL de Mercado Pago
+      },
+      (error) => {
+        console.error('Error al crear el pago:', error);
+        // Manejo de errores apropiado para el usuario
+      }
     );
   }
 }

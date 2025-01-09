@@ -93,7 +93,7 @@ export class CartComponent implements OnInit {
 
   calculateTotal(): void {
     this.total = this.items.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + item.product_price * item.quantity,
       0
     );
   }

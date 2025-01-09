@@ -1,7 +1,6 @@
 import mercadopago from "mercadopago";
 import CartItemsModel from "../models/cartItemModel.js";
 import cartModel from "../models/cartModel.js";
-import ProductModel from "../models/productModel.js";
 
 mercadopago.configure({
   access_token:
@@ -11,64 +10,49 @@ mercadopago.configure({
 
 const createPayment = async (req, res) => {
   try {
-    const { user_id } = req.body;
-    console.log(user_id);
+    const { user_id } = req.body; // Suponiendo que el user_id viene en el cuerpo de la solicitud
 
+    // Obtener el ID del carrito
     const cartData = await cartModel.getCartIdByuserId(user_id);
     if (!cartData) {
       return res.status(404).json({ message: "Carrito no encontrado." });
     }
 
-    const cart_id = cartData.id;
+    const cart_id = cartData.id; // Asegúrate de usar `id`, ya que retornas `rows[0]`
+
+    // Obtener los items del carrito basado en cart_id
     const cartItems = await CartItemsModel.getByCartId(cart_id);
 
     if (!Array.isArray(cartItems) || cartItems.length === 0) {
       return res.status(400).json({ message: "El carrito está vacío." });
     }
 
-    const productIds = cartItems.map((item) => item.product_id);
-    const productPrices = await ProductModel.getPricesByIds(productIds); // Asegúrate de usar await
-
-    if (!Array.isArray(productPrices)) {
-      throw new Error("No se pudieron obtener los precios de los productos.");
-    }
-
-    const priceMap = productPrices.reduce((map, product) => {
-      map[product.id] = product.price;
-      return map;
-    }, {});
-
-    const items = cartItems.map((item) => {
-      const price = priceMap[item.product_id];
-      if (!price) {
-        throw new Error(
-          `No se encontró el precio para el producto con ID ${item.product_id}`
-        );
-      }
-      return {
-        title: item.name,
-        quantity: item.quantity,
-        currency_id: "ARS",
-        unit_price: parseFloat(price),
-      };
-    });
+    // Preparar los items para Mercado Pago
+    const items = cartItems.map((item) => ({
+      title: item.name, // Asegúrate de utilizar el nombre correcto del campo
+      quantity: item.quantity,
+      currency_id: "ARS",
+      unit_price: parseFloat(item.product_price), // Asegúrate de que sea un número
+    }));
 
     const preference = {
-      items,
+      items: items,
       back_urls: {
-        success: "http://localhost:4200/payment-success",
-        failure: "http://localhost:4200/payment-failure",
-        pending: "http://localhost:4200/payment-pending",
+        success: "https://provee.onrender.com/api/payment/success",
+        failure:
+          "https://provee-6qht0e6k3-tobiasmastroberardinis-projects.vercel.app/failure",
+        pending: "http://localhost:4200/pending",
       },
       auto_return: "approved",
-      external_reference: String(cart_id),
+      external_reference: String(cart_id), // Convertir a string
     };
 
+    // Crear preferencia de pago
     const response = await mercadopago.preferences.create(preference);
-    return res.status(200).json({ init_point: response.body.init_point });
+    res.json({ init_point: response.body.init_point });
   } catch (error) {
     console.error("Error al crear la preferencia:", error);
-    return res.status(500).send("Error al crear la preferencia");
+    res.status(500).send("Error al crear la preferencia");
   }
 };
 
@@ -99,7 +83,7 @@ const paymentSuccess = async (req, res) => {
 
     // Calcular el total de la orden, asegurando que 'price' sea un número
     const total = cartItems.reduce((sum, item) => {
-      let price = item.price;
+      let price = item.product_price;
 
       // Asegurarse de que 'price' sea un número
       if (typeof price === "string") {
@@ -127,7 +111,11 @@ const paymentSuccess = async (req, res) => {
     // Crear los items de la orden
     for (const item of cartItems) {
       // Validación adicional para asegurarse de que los datos del item estén completos
-      if (!item.product_id || !item.quantity || item.price === undefined) {
+      if (
+        !item.product_id ||
+        !item.quantity ||
+        item.product_price === undefined
+      ) {
         console.error("Datos inválidos para el item del carrito:", item);
         throw new Error(
           "Los datos del carrito están incompletos o son inválidos."
@@ -135,7 +123,7 @@ const paymentSuccess = async (req, res) => {
       }
 
       // Asegurarse de que 'price' sea un número
-      let price = item.price;
+      let price = item.product_price;
       if (typeof price === "string") {
         price = parseFloat(price); // Convertirlo si es una cadena de texto
       }

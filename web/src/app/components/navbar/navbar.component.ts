@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertService } from '../../services/alert/alert.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { CartStatusService } from '../../services/cart-status/cart-status.service';
 import { CategoryService } from '../../services/category/category.service';
@@ -29,6 +30,7 @@ export class NavbarComponent implements OnInit {
     private cartStatusService: CartStatusService,
     private categoriesService: CategoryService,
     private userService: UserService,
+    private alertService: AlertService,
     private router: Router
   ) {}
 
@@ -75,7 +77,12 @@ export class NavbarComponent implements OnInit {
   }
 
   openCart(): void {
-    this.cartStatusService.toggleCart();
+    if (this.authService.isLogged()) {
+      this.cartStatusService.toggleCart();
+    } else if (!this.authService.isLogged()) {
+      this.alertService.showAlert('Debes estar logeado para ver tu carrito', 3);
+      this.router.navigate(['/login']);
+    }
   }
 
   toggleMobileMenu(): void {

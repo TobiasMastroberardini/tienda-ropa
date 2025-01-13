@@ -1,6 +1,8 @@
 import mercadopago from "mercadopago";
 import CartItemsModel from "../models/cartItemModel.js";
 import cartModel from "../models/cartModel.js";
+import OrderItemModel from "../models/orderItemModel.js";
+import OrderModel from "../models/orderModel.js";
 
 mercadopago.configure({
   access_token:
@@ -62,9 +64,7 @@ const paymentSuccess = async (req, res) => {
 
     // Verificar que el estado sea aprobado
     if (status && status !== "approved") {
-      return res.redirect(
-        "https://provee-6qht0e6k3-tobiasmastroberardinis-projects.vercel.app/failure"
-      );
+      return res.redirect("https://localhost:4200/failure");
     }
 
     const cart_id = parseInt(external_reference, 10);
@@ -92,7 +92,7 @@ const paymentSuccess = async (req, res) => {
 
       if (isNaN(price)) {
         throw new Error(
-          `El precio del item con id ${item.productId} no es válido.`
+          `El precio del item con id ${item.product_id} no es válido.`
         );
       }
 
@@ -100,7 +100,7 @@ const paymentSuccess = async (req, res) => {
     }, 0);
 
     // Crear la orden
-    const orderId = await orderModel.createOrder({
+    const orderId = await OrderModel.create({
       user_id,
       total,
       estado: "pagado", // Ajustar según corresponda
@@ -138,7 +138,7 @@ const paymentSuccess = async (req, res) => {
         throw new Error("La cantidad del producto no es válida.");
       }
 
-      await orderModel.createOrderItem({
+      await OrderItemModel.create({
         order_id: orderId,
         product_id: item.product_id,
         cantidad: item.quantity,

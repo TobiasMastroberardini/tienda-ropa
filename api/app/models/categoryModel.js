@@ -24,11 +24,11 @@ class CategoryModel {
         const whereClauses = Object.entries(conditions).map(
           ([key, value], index) => {
             if (typeof value === "string" && key === "name") {
-              values.push(value); // 'REMERA'
-              return `${key} LIKE $${index + 1}`; // LIKE $1
+              values.push(value);
+              return `${key} LIKE $${index + 1}`;
             }
             values.push(value);
-            return `${key} = $${index + 1}`; // Para otros campos
+            return `${key} = $${index + 1}`;
           }
         );
         query += " WHERE " + whereClauses.join(" AND ");

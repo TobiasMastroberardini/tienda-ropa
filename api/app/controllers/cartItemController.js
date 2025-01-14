@@ -47,7 +47,6 @@ class CartItemController {
       return res.status(400).json({ message: "ID inválido" });
     }
 
-    // Validación de datos actualizados, por ejemplo asegurando que hay un campo "quantity"
     if (typeof updatedData.quantity !== "number" || updatedData.quantity < 0) {
       return res
         .status(400)

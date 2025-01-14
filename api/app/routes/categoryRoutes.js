@@ -15,7 +15,7 @@ router.get("/:id", CategoryController.getCategory);
 // Crear una nueva categoría
 router.post(
   "/",
-  UploadMiddleware.array("images", 1), // Permitir hasta 5 imágenes por producto
+  UploadMiddleware.array("images", 1), // Permitir una imágen por producto
   CategoryController.createCategory
 );
 

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 class HandleBcrypt {
   // Método para encriptar un texto plano
   static async encrypt(textPlain) {
-    const hash = await bcrypt.hash(textPlain, 10); // Salto de 10 rondas
+    const hash = await bcrypt.hash(textPlain, 10);
     return hash;
   }
 

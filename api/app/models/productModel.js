@@ -140,7 +140,7 @@ class ProductModel {
       const values = [productIds];
 
       const result = await pool.query(query, values);
-      return result.rows; // Devuelve un array de objetos [{ id: 1, price: 100 }, ...]
+      return result.rows; // Devuelve un array de objetos
     } catch (error) {
       console.error("Error al obtener precios de los productos:", error);
       throw new Error("Error al obtener precios de los productos");

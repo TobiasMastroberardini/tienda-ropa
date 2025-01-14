@@ -4,6 +4,8 @@ import cartModel from "../models/cartModel.js";
 import OrderItemModel from "../models/orderItemModel.js";
 import OrderModel from "../models/orderModel.js";
 
+const userData = {};
+
 mercadopago.configure({
   access_token:
     process.env.MP_ACCESS_TOKEN ||
@@ -12,7 +14,9 @@ mercadopago.configure({
 
 const createPayment = async (req, res) => {
   try {
-    const { user_id } = req.body; // Suponiendo que el user_id viene en el cuerpo de la solicitud
+    const { user_id } = req.body;
+
+    userData.user_id = user_id;
 
     // Obtener el ID del carrito
     const cartData = await cartModel.getCartIdByuserId(user_id);
@@ -20,7 +24,7 @@ const createPayment = async (req, res) => {
       return res.status(404).json({ message: "Carrito no encontrado." });
     }
 
-    const cart_id = cartData.id; // Asegúrate de usar `id`, ya que retornas `rows[0]`
+    const cart_id = cartData.id;
 
     // Obtener los items del carrito basado en cart_id
     const cartItems = await CartItemsModel.getByCartId(cart_id);
@@ -31,19 +35,17 @@ const createPayment = async (req, res) => {
 
     // Preparar los items para Mercado Pago
     const items = cartItems.map((item) => ({
-      title: item.name, // Asegúrate de utilizar el nombre correcto del campo
+      title: item.name,
       quantity: item.quantity,
       currency_id: "ARS",
-      unit_price: parseFloat(item.product_price), // Asegúrate de que sea un número
+      unit_price: parseFloat(item.product_price),
     }));
 
     const preference = {
       items: items,
       back_urls: {
-        success: "https://provee.onrender.com/api/payment/success",
-        failure:
-          "https://provee-6qht0e6k3-tobiasmastroberardinis-projects.vercel.app/failure",
-        pending: "http://localhost:4200/pending",
+        success: "http://localhost:3000/api/payments/success",
+        failure: "http://localhost:4200/failure",
       },
       auto_return: "approved",
       external_reference: String(cart_id), // Convertir a string
@@ -75,11 +77,8 @@ const paymentSuccess = async (req, res) => {
       throw new Error("El carrito está vacío o no tiene items válidos.");
     }
 
-    // Obtener el user_id a partir del cart_id
-    const user_id = await cartModel.getCartIdByuserId(cart_id);
-    if (!user_id) {
-      throw new Error("No se pudo obtener el user_id para el carrito.");
-    }
+    // Obtener el user_id
+    const user_id = userData.user_id;
 
     // Calcular el total de la orden, asegurando que 'price' sea un número
     const total = cartItems.reduce((sum, item) => {
@@ -103,9 +102,7 @@ const paymentSuccess = async (req, res) => {
     const orderId = await OrderModel.create({
       user_id,
       total,
-      estado: "pagado", // Ajustar según corresponda
-      direccion_envio: "Dirección de ejemplo", // Ajustar según tu lógica
-      metodo_pago: "tarjeta", // Ajustar según corresponda
+      status: "pagado",
     });
 
     // Crear los items de la orden
@@ -142,7 +139,7 @@ const paymentSuccess = async (req, res) => {
         order_id: orderId,
         product_id: item.product_id,
         cantidad: item.quantity,
-        precio_unitario: price, // Precio formateado
+        precio_unitario: price,
       });
     }
 
@@ -154,14 +151,10 @@ const paymentSuccess = async (req, res) => {
     }
 
     // Redirigir al frontend
-    return res.redirect(
-      "https://provee-6qht0e6k3-tobiasmastroberardinis-projects.vercel.app/success"
-    );
+    return res.redirect("http://localhost:4200/success");
   } catch (error) {
     console.error("Error al procesar el éxito del pago:", error);
-    return res.redirect(
-      "https://provee-6qht0e6k3-tobiasmastroberardinis-projects.vercel.app/failure"
-    );
+    return res.redirect("http://localhost:4200/failure");
   }
 };
 

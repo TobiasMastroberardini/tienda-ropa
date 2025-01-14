@@ -108,7 +108,7 @@ class CategoryController {
       if (!deletedCategory) {
         return res.status(404).json({ message: "Categoría no encontrada" });
       }
-      res.status(204).end(); // 204 No Content
+      res.status(204).end();
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

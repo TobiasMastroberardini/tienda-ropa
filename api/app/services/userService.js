@@ -15,9 +15,9 @@ class UserService {
   // Configurar el transporte de correo
   static getTransporter() {
     return nodemailer.createTransport({
-      host: "smtp.gmail.com", // Cambia esto según tu proveedor SMTP
-      port: 587, // Cambia si usas otro puerto
-      secure: false, // true para 465, false para otros puertos
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER, // Credenciales
         pass: process.env.EMAIL_PASS,
@@ -31,18 +31,18 @@ class UserService {
       const transporter = this.getTransporter();
 
       const mailOptions = {
-        from: `"Soporte" <${process.env.EMAIL_USER}>`, // Opcional: personaliza el nombre del remitente
+        from: `"Soporte" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: subject,
-        text: message, // Mensaje en texto plano
-        html: `<p>${message}</p>`, // Opcional: si quieres un mensaje con formato HTML
+        text: message,
+        html: `<p>${message}</p>`,
       };
 
       const info = await transporter.sendMail(mailOptions);
       console.log("Correo enviado:", info.messageId);
     } catch (error) {
       console.error("Error al enviar el correo:", error);
-      throw new Error("No se pudo enviar el correo."); // Lanza el error para manejo posterior
+      throw new Error("No se pudo enviar el correo.");
     }
   }
 

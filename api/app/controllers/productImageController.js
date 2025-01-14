@@ -1,5 +1,4 @@
-// controllers/ProductImageController.js
-import upload from "../../config/multer.js"; // Importar el middleware de multer
+import upload from "../../config/multer.js";
 import ProductImageModel from "../models/productImageModel.js";
 
 class ProductImageController {

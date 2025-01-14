@@ -7,7 +7,7 @@ import OrderModel from "../models/orderModel.js";
 const userData = {};
 
 mercadopago.configure({
-  access_token: process.env.MP_ACCESS_TOKEN,
+  access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN,
 });
 
 const createPayment = async (req, res) => {

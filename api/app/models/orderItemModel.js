@@ -14,16 +14,27 @@ class OrderItemModel {
     return rows[0];
   }
 
-  static async create(data) {
-    const columns = Object.keys(data).join(", ");
-    const values = Object.values(data);
-    const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
-    const query = `INSERT INTO order_items (${columns}) VALUES (${placeholders}) RETURNING *`;
+  static async create({ order_id, product_id, quantity, price }) {
+    if (
+      !order_id ||
+      !product_id ||
+      quantity === undefined ||
+      price === undefined
+    ) {
+      throw new Error(
+        `Parámetros inválidos: order_id=${order_id}, product_id=${product_id}, quantity=${quantity}, price=${price}`
+      );
+    }
+
+    const query = `
+      INSERT INTO order_items (order_id, product_id, quantity, price)
+      VALUES ($1, $2, $3, $4)
+    `;
 
     try {
-      const { rows } = await pool.query(query, values);
-      return rows[0];
+      await pool.query(query, [order_id, product_id, quantity, price]);
     } catch (error) {
+      console.error("Error al insertar en order_items:", error);
       throw error;
     }
   }

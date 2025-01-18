@@ -96,6 +96,7 @@ const paymentSuccess = async (req, res) => {
       return sum + item.quantity * price; // Calcular el total
     }, 0);
 
+    console.log("Va a crear la order");
     // Crear la orden
     const orderId = await OrderModel.create({
       user_id,
@@ -133,11 +134,13 @@ const paymentSuccess = async (req, res) => {
         throw new Error("La cantidad del producto no es válida.");
       }
 
+      console.log("Va a crear el item");
+
       await OrderItemModel.create({
         order_id: orderId,
         product_id: item.product_id,
-        cantidad: item.quantity,
-        precio_unitario: price,
+        quantity: item.quantity,
+        price: price,
       });
     }
 

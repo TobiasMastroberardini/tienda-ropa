@@ -9,6 +9,7 @@ import { EditProductComponent } from './components/edit-product/edit-product.com
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { PaySuccessComponent } from './components/pay-success/pay-success.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
 import { ProductsAdminComponent } from './components/products-admin/products-admin.component';
@@ -24,6 +25,10 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+  },
+  {
+    path: 'success',
+    component: PaySuccessComponent,
   },
   {
     path: 'products',

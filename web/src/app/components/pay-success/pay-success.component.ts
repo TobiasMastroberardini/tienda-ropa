@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { HomeComponent } from '../home/home.component';
 
 @Component({
@@ -10,9 +11,12 @@ import { HomeComponent } from '../home/home.component';
   styleUrl: './pay-success.component.scss',
 })
 export class PaySuccessComponent {
-  @Input() isModalOpen: boolean = true;
+  isModalOpen: boolean = true;
+
+  constructor(private router: Router) {}
 
   closeModal() {
     this.isModalOpen = false;
+    this.router.navigate(['/home']);
   }
 }

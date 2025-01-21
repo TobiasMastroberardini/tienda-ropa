@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
-import { AuthService } from '../services/auth/auth.service';
-import { LoaderService } from '../services/loader/loader.service'; // Un servicio para manejar el estado de carga
-import { UserService } from '../services/user/user.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { LoaderService } from '../../services/loader/loader.service';
+import { UserService } from '../../services/user/user.service';
 
 @Injectable({
   providedIn: 'root',

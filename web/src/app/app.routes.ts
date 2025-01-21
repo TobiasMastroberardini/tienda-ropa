@@ -14,7 +14,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
 import { ProductsAdminComponent } from './components/products-admin/products-admin.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { AdminGuard } from './guards/admin.guard';
+import { AdminGuard } from './guards/admin/admin.guard';
 
 export const routes: Routes = [
   {
